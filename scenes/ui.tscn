@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://bj4rb8eh71n4r"]
+
+[ext_resource type="Script" uid="uid://btkbxvm0siuwh" path="res://scripts/ui.gd" id="1_nt7q6"]
+
+[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nt7q6")
+iterations_label = NodePath("MarginContainer/Iterations_Label")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 94.0
+grow_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Iterations_Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+text = "Iterations: "
+
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 42.0
+offset_bottom = 41.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="MenuButton" type="Button" parent="MarginContainer2"]
+layout_mode = 2
+
+[node name="PopupPanel" type="PopupPanel" parent="MarginContainer2"]
+size = Vector2i(116, 100)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/PopupPanel"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 112.0
+offset_bottom = 96.0
+
+[node name="Button" type="Button" parent="MarginContainer2/PopupPanel/VBoxContainer"]
+layout_mode = 2
+text = "Just a button"
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer2/PopupPanel/VBoxContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer2/MenuButton" to="." method="_on_menu_button_pressed"]
