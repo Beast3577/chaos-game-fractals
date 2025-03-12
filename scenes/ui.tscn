@@ -1,8 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://bj4rb8eh71n4r"]
+[gd_scene load_steps=5 format=3 uid="uid://bj4rb8eh71n4r"]
 
 [ext_resource type="Script" uid="uid://btkbxvm0siuwh" path="res://scripts/ui.gd" id="1_nt7q6"]
+[ext_resource type="Theme" uid="uid://j7anjn7mdyf8" path="res://themes/JetBrainsTheme.tres" id="2_x4jx1"]
+[ext_resource type="FontFile" uid="uid://cybieo0jyfl0h" path="res://fonts/JetBrainsMono-Bold.ttf" id="3_gdt2y"]
+[ext_resource type="Texture2D" uid="uid://qcys11neco2w" path="res://assets/icons/menu_white.png" id="3_yev5y"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label")]
+[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "popup_container", "max_points_spin_box", "steps_per_second_spin_box", "points_per_step_spin_box", "unlimited_steps_per_second_check_button", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,9 +13,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nt7q6")
-iterations_label = NodePath("MarginContainer/Iterations_Label")
+iterations_label = NodePath("InterationsMarginContainer/IterationsLabel")
+menu_button = NodePath("MenuButtonMarginContainer/MenuButton")
+popup_container = NodePath("PanelContainerMarginContainer/PopupContainer")
+max_points_spin_box = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/MaxPointsSpinBox")
+steps_per_second_spin_box = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/StepsPerSecondSpinBox")
+points_per_step_spin_box = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PointsPerStepSpinBox")
+unlimited_steps_per_second_check_button = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton")
+random_type_option_button = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/RandomTypeOptionButton")
+polygon_vertices_spin_box = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PolygonVerticesSpinbox")
+show_polygon_vertices_check_button = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/ShowPolygonVerticesCheckButton")
+show_polygon_lines_check_button = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/ShowPolygonLinesCheckButton")
+polygon_vertex_size_spin_box = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PolygonVertexSizeSpinBox")
+point_size_spin_box = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PointSizeSpinBox")
+use_point_colour_check_button = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/UsePointColourCheckButton")
+use_point_opacity_check_button = NodePath("PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/UsePointOpacityCheckButton")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="InterationsMarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -23,34 +40,217 @@ grow_vertical = 0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Iterations_Label" type="Label" parent="MarginContainer"]
+[node name="IterationsLabel" type="Label" parent="InterationsMarginContainer"]
 layout_mode = 2
 text = "Iterations: "
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
+[node name="PanelContainerMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 325.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 50
+
+[node name="PopupContainer" type="PanelContainer" parent="PanelContainerMarginContainer"]
+layout_mode = 2
+theme = ExtResource("2_x4jx1")
+
+[node name="SettingsMarginContainer" type="MarginContainer" parent="PanelContainerMarginContainer/PopupContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_x4jx1")
+
+[node name="SimulationHeaderMarginContainer" type="MarginContainer" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="SimulationHeaderLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/SimulationHeaderMarginContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+text = "Simulation"
+horizontal_alignment = 1
+
+[node name="HSeparator13" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MaxPointsLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Max Points"
+
+[node name="MaxPointsSpinBox" type="SpinBox" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StepsPerSecondLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Steps per Second"
+
+[node name="StepsPerSecondSpinBox" type="SpinBox" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="UnlimitedStepsPerSecondCheckButton" type="CheckButton" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Unlimited"
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PointsPerStepLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Points per Step"
+
+[node name="PointsPerStepSpinBox" type="SpinBox" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator12" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RandomTypeLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Random Type"
+
+[node name="RandomTypeOptionButton" type="OptionButton" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+fit_to_longest_item = false
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "True Random"
+popup/item_0/id = 0
+popup/item_1/text = "No Double Ups"
+popup/item_1/id = 1
+popup/item_2/text = "No Neighbour On Double Up"
+popup/item_2/id = 2
+
+[node name="HSeparator3" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PolygonHeaderMarginContainer" type="MarginContainer" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="PolygonHeaderLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PolygonHeaderMarginContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+text = "Polygon"
+horizontal_alignment = 1
+
+[node name="HSeparator4" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PolygonVerticesLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Vertices"
+
+[node name="PolygonVerticesSpinbox" type="SpinBox" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator5" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowPolygonVerticesCheckButton" type="CheckButton" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Show Vertices
+"
+
+[node name="HSeparator6" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowPolygonLinesCheckButton" type="CheckButton" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Show Lines
+"
+
+[node name="HSeparator7" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PolygonVertexSizeLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Vertex Size"
+
+[node name="PolygonVertexSizeSpinBox" type="SpinBox" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator8" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PointsHeaderMarginContainer" type="MarginContainer" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+
+[node name="PointsHeaderLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PointsHeaderMarginContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+text = "Points"
+horizontal_alignment = 1
+
+[node name="HSeparator9" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PointSizeLabel" type="Label" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Point Size"
+
+[node name="PointSizeSpinBox" type="SpinBox" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator10" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UsePointColourCheckButton" type="CheckButton" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Use Colour"
+
+[node name="HSeparator11" type="HSeparator" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UsePointOpacityCheckButton" type="CheckButton" parent="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Use Opacity"
+
+[node name="MenuButtonMarginContainer" type="MarginContainer" parent="."]
 layout_mode = 0
-offset_right = 42.0
-offset_bottom = 41.0
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 
-[node name="MenuButton" type="Button" parent="MarginContainer2"]
+[node name="MenuButton" type="Button" parent="MenuButtonMarginContainer"]
 layout_mode = 2
+theme = ExtResource("2_x4jx1")
+toggle_mode = true
+icon = ExtResource("3_yev5y")
+expand_icon = true
 
-[node name="PopupPanel" type="PopupPanel" parent="MarginContainer2"]
-size = Vector2i(116, 100)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer2/PopupPanel"]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 112.0
-offset_bottom = 96.0
-
-[node name="Button" type="Button" parent="MarginContainer2/PopupPanel/VBoxContainer"]
-layout_mode = 2
-text = "Just a button"
-
-[node name="SpinBox" type="SpinBox" parent="MarginContainer2/PopupPanel/VBoxContainer"]
-layout_mode = 2
-
-[connection signal="pressed" from="MarginContainer2/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="MenuButtonMarginContainer/MenuButton" to="." method="_on_menu_button_pressed"]
