@@ -253,4 +253,16 @@ toggle_mode = true
 icon = ExtResource("3_yev5y")
 expand_icon = true
 
+[connection signal="value_changed" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/MaxPointsSpinBox" to="." method="_on_max_points_spin_box_value_changed"]
+[connection signal="value_changed" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/StepsPerSecondSpinBox" to="." method="_on_steps_per_second_spin_box_value_changed"]
+[connection signal="toggled" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton" to="." method="_on_unlimited_steps_per_second_check_button_toggled"]
+[connection signal="value_changed" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PointsPerStepSpinBox" to="." method="_on_points_per_step_spin_box_value_changed"]
+[connection signal="item_selected" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/RandomTypeOptionButton" to="." method="_on_random_type_option_button_item_selected"]
+[connection signal="value_changed" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PolygonVerticesSpinbox" to="." method="_on_polygon_vertices_spinbox_value_changed"]
+[connection signal="toggled" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/ShowPolygonVerticesCheckButton" to="." method="_on_show_polygon_vertices_check_button_toggled"]
+[connection signal="toggled" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/ShowPolygonLinesCheckButton" to="." method="_on_show_polygon_lines_check_button_toggled"]
+[connection signal="value_changed" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PolygonVertexSizeSpinBox" to="." method="_on_polygon_vertex_size_spin_box_value_changed"]
+[connection signal="value_changed" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/PointSizeSpinBox" to="." method="_on_point_size_spin_box_value_changed"]
+[connection signal="toggled" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/UsePointColourCheckButton" to="." method="_on_use_point_colour_check_button_toggled"]
+[connection signal="toggled" from="PanelContainerMarginContainer/PopupContainer/SettingsMarginContainer/ScrollContainer/VBoxContainer/UsePointOpacityCheckButton" to="." method="_on_use_point_opacity_check_button_toggled"]
 [connection signal="pressed" from="MenuButtonMarginContainer/MenuButton" to="." method="_on_menu_button_pressed"]

@@ -17,4 +17,4 @@ one_shot = true
 
 [node name="UI" parent="CanvasLayer" instance=ExtResource("3_sugp2")]
 
-[connection signal="finished" from="Points" to="." method="_on_points_finished"]
+[connection signal="timeout" from="PointTimer" to="Points" method="_on_point_timer_timeout"]
