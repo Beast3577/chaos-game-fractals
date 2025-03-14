@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bj4rb8eh71n4r"]
+[gd_scene load_steps=17 format=3 uid="uid://bj4rb8eh71n4r"]
 
 [ext_resource type="Script" uid="uid://btkbxvm0siuwh" path="res://scripts/ui.gd" id="1_nt7q6"]
 [ext_resource type="Theme" uid="uid://dh0mthso4wi51" path="res://themes/StartStepButtonsTheme.tres" id="2_wm3ai"]
@@ -10,7 +10,6 @@
 [ext_resource type="StyleBox" uid="uid://bb4pys034ijj2" path="res://themes/style boxes/saveload_pressed_style_box_flat.tres" id="7_7dvkv"]
 [ext_resource type="StyleBox" uid="uid://bcqdifbsihj2t" path="res://themes/style boxes/saveload_normal_style_box_flat.tres" id="8_vdcm2"]
 [ext_resource type="Theme" uid="uid://bwwngxw7tdvhu" path="res://themes/SaveLoadTheme.tres" id="10_7dvkv"]
-[ext_resource type="Texture2D" uid="uid://buekb6xv5k16f" path="res://assets/icons/warning_icon.png" id="12_vsj0x"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gdt2y"]
 
@@ -24,9 +23,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7dvkv"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vsj0x"]
-
-[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_margin_container", "scroll_container", "max_points_spin_box", "steps_per_second_spin_box", "points_per_step_spin_box", "unlimited_steps_per_second_check_button", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "use_midpoint_check_button", "save_load_panel_margin_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container", "confirmation_margin_container", "warning_rich_text_label")]
+[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_container", "scroll_container", "max_points_spin_box", "steps_per_second_spin_box", "points_per_step_spin_box", "unlimited_steps_per_second_check_button", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "use_midpoint_check_button", "save_load_panel_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,7 +36,7 @@ menu_button = NodePath("MenuButtonMarginContainer/MenuButton")
 start_button = NodePath("RightSideMarginContainer/VBoxContainer/StartButton")
 step_button = NodePath("RightSideMarginContainer/VBoxContainer/StepButton")
 reset_button = NodePath("RightSideMarginContainer/VBoxContainer/ResetButton")
-settings_panel_margin_container = NodePath("SettingsPanelMarginContainer")
+settings_panel_container = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer")
 scroll_container = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer")
 max_points_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MaxPointsSpinBox")
 steps_per_second_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/StepsPerSecondSpinBox")
@@ -54,12 +51,10 @@ point_size_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContai
 use_point_colour_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UsePointColourCheckButton")
 use_point_opacity_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UsePointOpacityCheckButton")
 use_midpoint_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UseMidpointCheckButton")
-save_load_panel_margin_container = NodePath("SaveLoadPanelMarginContainer")
+save_load_panel_container = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer")
 save_load_panel_button = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveLoadPanelButton")
 save_name_line_edit = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveNameMarginContainer/SaveNameLineEdit")
 save_file_VBox_Container = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer/ScrollContainer/SaveFileVBoxMarginContainer/SaveFileVBoxContainer")
-confirmation_margin_container = NodePath("ConfirmationMarginContainer")
-warning_rich_text_label = NodePath("ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/WarningRichTextLabel")
 
 [node name="RightSideMarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -440,14 +435,15 @@ theme_override_styles/normal = ExtResource("8_vdcm2")
 text = "Cancel"
 
 [node name="ConfirmationMarginContainer" type="MarginContainer" parent="."]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -206.0
+offset_left = -188.0
 offset_top = -113.0
-offset_right = 206.0
+offset_right = 188.0
 offset_bottom = 113.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -466,43 +462,19 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer"]
 layout_mode = 2
 
-[node name="WarningTextureRect" type="TextureRect" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(42.97, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("12_vsj0x")
-expand_mode = 4
-
-[node name="WarningRichTextLabel" type="RichTextLabel" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Warning
-A file with the name \"\" already exists.
-Do you wish to overwrite this file?"
-horizontal_alignment = 1
+text = "Warning \\n"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="OverwriteButton" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Button" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/hover = ExtResource("6_cgfq5")
-theme_override_styles/pressed = ExtResource("7_7dvkv")
-theme_override_styles/normal = ExtResource("8_vdcm2")
-text = "Overwrite"
 
-[node name="VSeparator" type="VSeparator" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
+[node name="Button2" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_vsj0x")
-
-[node name="CancelButton" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/hover = ExtResource("6_cgfq5")
-theme_override_styles/pressed = ExtResource("7_7dvkv")
-theme_override_styles/normal = ExtResource("8_vdcm2")
-text = "Cancel"
 
 [connection signal="toggled" from="RightSideMarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_toggled"]
 [connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/StepButton" to="." method="_on_step_button_pressed"]
@@ -525,5 +497,3 @@ text = "Cancel"
 [connection signal="toggled" from="MenuButtonMarginContainer/MenuButton" to="." method="_on_menu_button_toggled"]
 [connection signal="pressed" from="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveLoadPanelButton" to="." method="_on_save_load_panel_button_pressed"]
 [connection signal="pressed" from="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/CancelPanelButton" to="." method="_on_cancel_panel_button_pressed"]
-[connection signal="pressed" from="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer/OverwriteButton" to="." method="_on_overwrite_button_pressed"]
-[connection signal="pressed" from="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]

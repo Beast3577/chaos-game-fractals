@@ -1,59 +1,94 @@
 extends Node2D
 
+# onready node variables
 @onready var points: MultiMeshInstance2D = $Points
 @onready var ui: Control = $CanvasLayer/UI
 
-var polygon_vertices: Array
+var polygon_vertices: Array # array of Vector2s containing the screen coordinates of each vertex
 
-var margin: int = 50
-var window_size: Vector2
+var margin: int = 50 # distance that vertices stay from the edge in pixels
+var window_size: Vector2 # the window size
 
-var started: bool = false
-var start_time
+var started: bool = false # have the points started being generated, ie. settings locked in place
 
+
+# called when the node is "ready", i.e. when both the node and its children have entered the scene tree
 func _ready() -> void:
+	# connect ui signals
 	ui.connect("start", _on_ui_start)
+	ui.connect("stop", _on_ui_stop)
+	ui.connect("step", _on_ui_step)
 	ui.connect("update_polygon", _on_ui_update_polygon)
-	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	
+	# connect window size change signal and setup window_size variable
+	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	window_size = get_viewport().get_visible_rect().size
 	
-	update_polygon()
-  
+	update_polygon() # initial generation and placement of the polygon vertices
+
+# called when the window is resized, updates window_size variable and updates polygon to fit
 func _on_viewport_size_changed() -> void:
 	if !started:
 		window_size = get_viewport().get_visible_rect().size
 		update_polygon()
 
+# called when CanvasItem has been requested to redraw (after queue_redraw() is called, either manually or by the engine)
 func _draw() -> void:
+	# draws polygon vertices if show_polygon_vertices is true
 	if Global.show_polygon_vertices:
 		for vertex in polygon_vertices:
 			draw_circle(vertex, Global.polygon_vertex_size, Color.WHITE)
+	# draws polygon lines if show_polygon_lines is true
 	if Global.show_polygon_lines:
 		for vertex in polygon_vertices:
+			# loops through each vertex to draw a line between it and the next vertex, if its the last vertex in the array it wraps around to the first vertex
 			if vertex == polygon_vertices.back():
 				draw_line(vertex, polygon_vertices.front(), Color.WHITE)
 			else:
 				draw_line(vertex, polygon_vertices[polygon_vertices.find(vertex) + 1], Color.WHITE)
 
+# dynamically generates the polygon vertices depending on n, the number of vertices dictated by the user, returns an array of vertices
 func generate_polygon_vertices(n: float, radius: float, center: Vector2) -> Array:
 	var vertices: Array
+	# magic maths shit that actually figues out where the vertices are placed
 	for i in n:
-		var angle = i * TAU / n # TAU = 2 * PI
-		var x = center.x + sin(angle) * radius
-		var y = center.y - cos(angle) * radius
-		
+		var angle: float = i * TAU / n # TAU = 2 * PI
+		var x: float = center.x + sin(angle) * radius
+		var y: float = center.y - cos(angle) * radius
 		vertices.append(Vector2(x, y))
+	# adds a center point if dictated by user
+	if Global.use_midpoint:
+		vertices.append(center)
 	return vertices
 
+# main function for handling the generation and drawing of the polygon everytime it needs to be redrawn for various reasons
 func update_polygon() -> void:
 	polygon_vertices = generate_polygon_vertices(Global.polygon_vertices, min(window_size.x, window_size.y)/2 - margin, Vector2(window_size.x/2, window_size.y/2))
 	queue_redraw()
 
+# called with signal "start" from ui, starts generating points
 func _on_ui_start() -> void:
+	if !started: # if points havent started being generated it sets everything up
+		points.setup_multimesh(Global.max_points, true) # start_running = true, starts iterations
+		points.generate_point_colours(polygon_vertices)
+	else: # otherwise the point generation is just unpausing
+		points.running = true
 	started = true
-	points.setup_multimesh(Global.max_points)
-	points.start_generate_points(polygon_vertices)
 
+# called with signal "stop" from ui, stops generating points
+func _on_ui_stop() -> void:
+	points.running = false
+
+# called with signal "step" from ui, runs the point generation for a single step
+func _on_ui_step() -> void:
+	if !started: # makes sure everything is setup if it hasn't already
+		points.setup_multimesh(Global.max_points, false) # start_running = false, doesn't start iterations
+		points.generate_point_colours(polygon_vertices)
+		points.stepping = true
+		started = true
+	else:
+		points.stepping = true
+
+# called with signal "update_polygon" from ui, when the polygon needs to be updated from the ui.gd script
 func _on_ui_update_polygon() -> void:
 	update_polygon()

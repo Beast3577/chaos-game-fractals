@@ -1,6 +1,11 @@
 extends Node
 
-var point_count := 0
+# values used for reset consistency
+var point_count: int = 0 # resets to zero
+# reset specific persistant values
+var menu_button_pressed := false
+var scroll_horizontal: int = 0
+var scroll_vertical: int = 0
 
 # Default Settings
 var max_points: int = 1000000
@@ -15,16 +20,25 @@ var show_polygon_vertices: bool = true
 var show_polygon_lines: bool = true
 var polygon_vertex_size: float = 3
 
-var point_size: float = 1
+var point_size: float = 1 #
 var use_point_colour: bool = false
 var use_point_opacity: bool = false
 var point_opacity: float = 0.1
 
+var use_midpoint: bool = false
+
+
 """
 TODO
-- make check buttons hide relavant settings
-- add opacity slider
-- add colour pick options
-- add simulation buttons
+- add ability to delete saves
 - add picking start spot
+- slow down on higher max_points
+- midpoint breaks things
+
+- point size
+- make check buttons hide relevant settings
+- add opacity slider
+- add disabling to relevant settings
+- add colour pick options
+- add jiggle to settings
 """
