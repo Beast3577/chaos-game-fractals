@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bj4rb8eh71n4r"]
+[gd_scene load_steps=21 format=3 uid="uid://bj4rb8eh71n4r"]
 
 [ext_resource type="Script" uid="uid://btkbxvm0siuwh" path="res://scripts/ui.gd" id="1_nt7q6"]
 [ext_resource type="Theme" uid="uid://dh0mthso4wi51" path="res://themes/StartStepButtonsTheme.tres" id="2_wm3ai"]
@@ -12,6 +12,7 @@
 [ext_resource type="Theme" uid="uid://bwwngxw7tdvhu" path="res://themes/SaveLoadTheme.tres" id="10_7dvkv"]
 [ext_resource type="Texture2D" uid="uid://b6g16q4yli32p" path="res://assets/icons/dot_menu_vertical_icon_white.png" id="11_6rmj2"]
 [ext_resource type="Texture2D" uid="uid://dxlyaj6gxlmqr" path="res://assets/icons/warning_icon_white.png" id="11_vdcm2"]
+[ext_resource type="Theme" uid="uid://dqfid4420twhu" path="res://themes/OverwriteButtonTheme.tres" id="13_vsj0x"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gdt2y"]
 
@@ -27,7 +28,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qsv74"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_margin_container", "scroll_container", "max_points_spin_box", "steps_per_second_spin_box", "points_per_step_spin_box", "unlimited_steps_per_second_check_button", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "use_midpoint_check_button", "save_load_panel_margin_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container", "confirmation_margin_container", "warning_rich_text_label", "overwrite_button", "context_menu_popup_panel")]
+[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_margin_container", "scroll_container", "max_points_spin_box", "unlimited_steps_per_second_check_button", "steps_per_second_spin_box", "points_per_step_spin_box", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "use_midpoint_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "save_load_panel_margin_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container", "confirmation_margin_container", "warning_rich_text_label", "overwrite_button", "opacity_slider", "show_starting_point_check_button", "context_menu_popup_panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,18 +44,18 @@ reset_button = NodePath("RightSideMarginContainer/VBoxContainer/ResetButton")
 settings_panel_margin_container = NodePath("SettingsPanelMarginContainer")
 scroll_container = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer")
 max_points_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MaxPointsSpinBox")
+unlimited_steps_per_second_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton")
 steps_per_second_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/StepsPerSecondSpinBox")
 points_per_step_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsPerStepSpinBox")
-unlimited_steps_per_second_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton")
 random_type_option_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/RandomTypeOptionButton")
 polygon_vertices_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVerticesSpinbox")
 show_polygon_vertices_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/ShowPolygonVerticesCheckButton")
 show_polygon_lines_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/ShowPolygonLinesCheckButton")
+use_midpoint_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UseMidpointCheckButton")
 polygon_vertex_size_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVertexSizeSpinBox")
 point_size_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointSizeSpinBox")
 use_point_colour_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UsePointColourCheckButton")
 use_point_opacity_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UsePointOpacityCheckButton")
-use_midpoint_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UseMidpointCheckButton")
 save_load_panel_margin_container = NodePath("SaveLoadPanelMarginContainer")
 save_load_panel_button = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveLoadPanelButton")
 save_name_line_edit = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveNameMarginContainer/SaveNameLineEdit")
@@ -62,6 +63,8 @@ save_file_VBox_Container = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelC
 confirmation_margin_container = NodePath("ConfirmationMarginContainer")
 warning_rich_text_label = NodePath("ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/WarningRichTextLabel")
 overwrite_button = NodePath("ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer/OverwriteButton")
+opacity_slider = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/VBoxContainer/OpacitySlider")
+show_starting_point_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/ShowStartingPointCheckButton")
 context_menu_popup_panel = NodePath("ContextMenuPopupPanel")
 
 [node name="RightSideMarginContainer" type="MarginContainer" parent="."]
@@ -177,12 +180,12 @@ theme_override_constants/separation = 10
 layout_mode = 2
 text = "Steps per Second"
 
-[node name="StepsPerSecondSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
-layout_mode = 2
-
 [node name="UnlimitedStepsPerSecondCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Unlimited"
+
+[node name="StepsPerSecondSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
 
 [node name="HSeparator2" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -255,6 +258,14 @@ layout_mode = 2
 text = "Show Lines
 "
 
+[node name="HSeparator14" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UseMidpointCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Use Midpoint"
+
 [node name="HSeparator7" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -304,13 +315,23 @@ theme_override_constants/separation = 10
 layout_mode = 2
 text = "Use Opacity"
 
-[node name="HSeparator14" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Opacity"
+
+[node name="OpacitySlider" type="HSlider" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator16" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="UseMidpointCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+[node name="ShowStartingPointCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Use Midpoint"
+text = "Show Starting Point"
 
 [node name="SaveLoadButtonsMarginContainer" type="MarginContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -391,7 +412,7 @@ placeholder_text = "Enter Save Name"
 
 [node name="ScrollMarginContainer" type="MarginContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_right = 6
 
 [node name="ScrollContainer" type="ScrollContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer"]
 custom_minimum_size = Vector2(0, 150.065)
@@ -507,9 +528,7 @@ layout_mode = 2
 [node name="OverwriteButton" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/hover = ExtResource("6_cgfq5")
-theme_override_styles/pressed = ExtResource("7_7dvkv")
-theme_override_styles/normal = ExtResource("8_vdcm2")
+theme = ExtResource("13_vsj0x")
 text = "Overwrite"
 metadata/confirmation_type = 0
 
@@ -565,18 +584,20 @@ alignment = 0
 [connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/StepButton" to="." method="_on_step_button_pressed"]
 [connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MaxPointsSpinBox" to="." method="_on_max_points_spin_box_value_changed"]
-[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/StepsPerSecondSpinBox" to="." method="_on_steps_per_second_spin_box_value_changed"]
 [connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton" to="." method="_on_unlimited_steps_per_second_check_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/StepsPerSecondSpinBox" to="." method="_on_steps_per_second_spin_box_value_changed"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsPerStepSpinBox" to="." method="_on_points_per_step_spin_box_value_changed"]
 [connection signal="item_selected" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/RandomTypeOptionButton" to="." method="_on_random_type_option_button_item_selected"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVerticesSpinbox" to="." method="_on_polygon_vertices_spinbox_value_changed"]
 [connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/ShowPolygonVerticesCheckButton" to="." method="_on_show_polygon_vertices_check_button_toggled"]
 [connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/ShowPolygonLinesCheckButton" to="." method="_on_show_polygon_lines_check_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UseMidpointCheckButton" to="." method="_on_use_midpoint_check_button_toggled"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVertexSizeSpinBox" to="." method="_on_polygon_vertex_size_spin_box_value_changed"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointSizeSpinBox" to="." method="_on_point_size_spin_box_value_changed"]
 [connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UsePointColourCheckButton" to="." method="_on_use_point_colour_check_button_toggled"]
 [connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UsePointOpacityCheckButton" to="." method="_on_use_point_opacity_check_button_toggled"]
-[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UseMidpointCheckButton" to="." method="_on_use_midpoint_check_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/VBoxContainer/OpacitySlider" to="." method="_on_opacity_slider_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/ShowStartingPointCheckButton" to="." method="_on_show_starting_point_check_button_toggled"]
 [connection signal="pressed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="toggled" from="MenuButtonMarginContainer/MenuButton" to="." method="_on_menu_button_toggled"]

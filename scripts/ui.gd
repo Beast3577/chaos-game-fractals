@@ -4,6 +4,7 @@ signal start
 signal stop
 signal step
 signal update_polygon
+
 var margin := 10
 
 # UI elements
@@ -17,18 +18,18 @@ var margin := 10
 @export var scroll_container: ScrollContainer
 
 @export var max_points_spin_box: SpinBox
+@export var unlimited_steps_per_second_check_button: CheckButton
 @export var steps_per_second_spin_box: SpinBox
 @export var points_per_step_spin_box: SpinBox
-@export var unlimited_steps_per_second_check_button: CheckButton
 @export var random_type_option_button: OptionButton
 @export var polygon_vertices_spin_box: SpinBox
 @export var show_polygon_vertices_check_button: CheckButton
 @export var show_polygon_lines_check_button: CheckButton
+@export var use_midpoint_check_button: CheckButton
 @export var polygon_vertex_size_spin_box: SpinBox
 @export var point_size_spin_box: SpinBox
 @export var use_point_colour_check_button: CheckButton
 @export var use_point_opacity_check_button: CheckButton
-@export var use_midpoint_check_button: CheckButton
 
 @export var save_load_panel_margin_container: MarginContainer
 @export var save_load_panel_button: Button
@@ -38,6 +39,8 @@ var margin := 10
 @export var confirmation_margin_container: MarginContainer
 @export var warning_rich_text_label: RichTextLabel
 @export var overwrite_button: Button
+@export var opacity_slider: HSlider
+@export var show_starting_point_check_button: CheckButton
 
 @export var context_menu_popup_panel: PopupPanel
 
@@ -47,6 +50,7 @@ var file_button_menu_texture = preload("res://assets/icons/dot_menu_vertical_ico
 func _ready() -> void:
 	save_load_panel_margin_container.hide()
 	confirmation_margin_container.hide()
+	context_menu_popup_panel.hide()
 
 	if Global.menu_button_pressed:
 		settings_panel_margin_container.show()
@@ -58,6 +62,10 @@ func _ready() -> void:
 		menu_button.set_pressed_no_signal(false)
 	
 	set_ui_values_to_global()
+	if Global.unlimited_steps_per_second:
+		steps_per_second_spin_box.hide()
+	if !Global.use_point_opacity:
+		opacity_slider.get_parent().hide()
 
 func _process(_delta: float) -> void:
 	iterations_label.text = "Iterations: " + str(Global.point_count)
@@ -101,25 +109,30 @@ func save_settings(save_name: String, confirmation: bool):
 		confirmation_margin_container.show()
 		warning_rich_text_label.text = "Warning\nThis file does not have a name.\nA name is required to proceed."
 		overwrite_button.text = "Continue"
+		overwrite_button.add_theme_stylebox_override("hover", preload("res://themes/style boxes/saveload_hover_style_box_flat.tres"))
+		overwrite_button.add_theme_stylebox_override("pressed", preload("res://themes/style boxes/saveload_pressed_style_box_flat.tres"))
+		overwrite_button.add_theme_stylebox_override("normal", preload("res://themes/style boxes/saveload_normal_style_box_flat.tres"))
+		
 		overwrite_button.set_meta("confirmation_type", 1)
 	else:
 		var save_file = FileAccess.open(file_path, FileAccess.WRITE)
 		
 		var save_dict = {
 			"max_points" : Global.max_points,
-			"steps_per_second" : Global.steps_per_second,
 			"unlimited_steps_per_second" : Global.unlimited_steps_per_second,
+			"steps_per_second" : Global.steps_per_second,
 			"points_per_step" : Global.points_per_step,
 			"random_type" : Global.random_type,
 			"polygon_vertices" : Global.polygon_vertices,
 			"show_polygon_vertices" : Global.show_polygon_vertices,
 			"show_polygon_lines" : Global.show_polygon_lines,
+			"use_midpoint" : Global.use_midpoint,
 			"polygon_vertex_size" : Global.polygon_vertex_size,
 			"point_size" : Global.point_size,
 			"use_point_colour" : Global.use_point_colour,
 			"use_point_opacity" : Global.use_point_opacity,
 			"point_opacity" : Global.point_opacity,
-			"use_midpoint" : Global.use_midpoint
+			"show_starting_point" : Global.show_starting_point
 		}
 		if save_file:
 			save_file.store_line(JSON.stringify(save_dict, "\t"))
@@ -219,6 +232,9 @@ func _on_overwrite_button_pressed() -> void:
 	var save_name = save_name_line_edit.text
 	if overwrite_button.get_meta("confirmation_type") == 1:
 		save_settings(save_name, false)
+		overwrite_button.remove_theme_stylebox_override("hover")
+		overwrite_button.remove_theme_stylebox_override("pressed")
+		overwrite_button.remove_theme_stylebox_override("normal")
 	elif overwrite_button.get_meta("confirmation_type") == 2:
 		DirAccess.remove_absolute("user://saves/" + save_name + ".json")
 		load_save_load_panel_margin_container()
@@ -268,11 +284,15 @@ func _on_delete_file_button_pressed() -> void:
 func _on_max_points_spin_box_value_changed(value: float) -> void:
 	Global.max_points = int(value)
 
-func _on_steps_per_second_spin_box_value_changed(value: float) -> void:
-	Global.steps_per_second = value
-
 func _on_unlimited_steps_per_second_check_button_toggled(toggled_on: bool) -> void:
 	Global.unlimited_steps_per_second = toggled_on
+	if toggled_on:
+		steps_per_second_spin_box.hide()
+	else:
+		steps_per_second_spin_box.show()
+
+func _on_steps_per_second_spin_box_value_changed(value: float) -> void:
+	Global.steps_per_second = value
 
 func _on_points_per_step_spin_box_value_changed(value: float) -> void:
 	Global.points_per_step = value
@@ -292,6 +312,10 @@ func _on_show_polygon_lines_check_button_toggled(toggled_on: bool) -> void:
 	Global.show_polygon_lines = toggled_on
 	update_polygon.emit()
 
+func _on_use_midpoint_check_button_toggled(toggled_on: bool) -> void:
+	Global.use_midpoint = toggled_on
+	update_polygon.emit()
+
 func _on_polygon_vertex_size_spin_box_value_changed(value: float) -> void:
 	Global.polygon_vertex_size = value
 	update_polygon.emit()
@@ -304,18 +328,25 @@ func _on_use_point_colour_check_button_toggled(toggled_on: bool) -> void:
 
 func _on_use_point_opacity_check_button_toggled(toggled_on: bool) -> void:
 	Global.use_point_opacity = toggled_on
+	if toggled_on:
+		opacity_slider.get_parent().show()
+	else:
+		opacity_slider.get_parent().hide()
 
-func _on_use_midpoint_check_button_toggled(toggled_on: bool) -> void:
-	Global.use_midpoint = toggled_on
+func _on_opacity_slider_value_changed(value: float) -> void:
+	Global.point_opacity = value
+
+func _on_show_starting_point_check_button_toggled(toggled_on: bool) -> void:
+	Global.show_starting_point = toggled_on
 	update_polygon.emit()
 
 func set_ui_values_to_global() -> void:
 	max_points_spin_box.max_value = 999999999
 	max_points_spin_box.set_value_no_signal(Global.max_points)
-	
+
+	unlimited_steps_per_second_check_button.set_pressed_no_signal(Global.unlimited_steps_per_second)
 	steps_per_second_spin_box.max_value = 1000
 	steps_per_second_spin_box.set_value_no_signal(Global.steps_per_second)
-	unlimited_steps_per_second_check_button.set_pressed_no_signal(Global.unlimited_steps_per_second)
 	
 	points_per_step_spin_box.max_value = 100000
 	points_per_step_spin_box.set_value_no_signal(Global.points_per_step)
@@ -327,8 +358,8 @@ func set_ui_values_to_global() -> void:
 	polygon_vertices_spin_box.set_value_no_signal(Global.polygon_vertices)
 	
 	show_polygon_vertices_check_button.set_pressed_no_signal(Global.show_polygon_vertices)
-	
 	show_polygon_lines_check_button.set_pressed_no_signal(Global.show_polygon_lines)
+	use_midpoint_check_button.set_pressed_no_signal(Global.use_midpoint)
 	
 	polygon_vertex_size_spin_box.max_value = 100
 	polygon_vertex_size_spin_box.set_value_no_signal(Global.polygon_vertex_size)
@@ -339,4 +370,5 @@ func set_ui_values_to_global() -> void:
 	use_point_colour_check_button.set_pressed_no_signal(Global.use_point_colour)
 	use_point_opacity_check_button.set_pressed_no_signal(Global.use_point_opacity)
 	
-	use_midpoint_check_button.set_pressed_no_signal(Global.use_midpoint)
+	opacity_slider.set_value_no_signal(Global.point_opacity)
+	show_starting_point_check_button.set_pressed_no_signal(Global.show_starting_point)
