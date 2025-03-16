@@ -41,4 +41,6 @@ TODO
 - add disabling to relevant settings
 - add colour pick options
 - add jiggle to settings
+- add feedback to save/load
+- make overwrite button red
 """

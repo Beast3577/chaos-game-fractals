@@ -37,6 +37,11 @@ var margin := 10
 
 @export var confirmation_margin_container: MarginContainer
 @export var warning_rich_text_label: RichTextLabel
+@export var overwrite_button: Button
+
+@export var context_menu_popup_panel: PopupPanel
+
+var file_button_menu_texture = preload("res://assets/icons/dot_menu_vertical_icon_white.png")
 
 
 func _ready() -> void:
@@ -81,25 +86,24 @@ func _on_reset_button_pressed() -> void:
 	get_tree().reload_current_scene()
 	Global.point_count = 0
 
-func _on_overwrite_button_pressed() -> void:
-	var save_name = save_name_line_edit.text
-	save_settings(save_name, true)
-	confirmation_margin_container.hide()
-
-func _on_cancel_button_pressed() -> void:
-	confirmation_margin_container.hide()
-
 func save_settings(save_name: String, confirmation: bool):
 	var saves_path = "user://saves/"
 	if not DirAccess.open(saves_path):
 		DirAccess.make_dir_absolute(saves_path)
 	
-	var file_name = saves_path + save_name + ".json"
-	if FileAccess.file_exists(file_name) and !confirmation:
+	var file_path = saves_path + save_name + ".json"
+	if FileAccess.file_exists(file_path) and !confirmation:
 		confirmation_margin_container.show()
 		warning_rich_text_label.text = "Warning\nA file with the name '" + save_name +"' already exists.\nDo you wish to overwrite this file?"
+		overwrite_button.text = "Overwrite"
+		overwrite_button.set_meta("confirmation_type", 0)
+	elif save_name == "":
+		confirmation_margin_container.show()
+		warning_rich_text_label.text = "Warning\nThis file does not have a name.\nA name is required to proceed."
+		overwrite_button.text = "Continue"
+		overwrite_button.set_meta("confirmation_type", 1)
 	else:
-		var save_file = FileAccess.open(file_name, FileAccess.WRITE)
+		var save_file = FileAccess.open(file_path, FileAccess.WRITE)
 		
 		var save_dict = {
 			"max_points" : Global.max_points,
@@ -120,12 +124,12 @@ func save_settings(save_name: String, confirmation: bool):
 		if save_file:
 			save_file.store_line(JSON.stringify(save_dict, "\t"))
 			save_file.close()
-		save_load_panel_margin_container.hide()
+		load_save_load_panel_margin_container()
 
 func load_settings(save_name: String):
-	var file_name = "user://saves/" + save_name + ".json"
-	if FileAccess.file_exists(file_name):
-		var save_file = FileAccess.open(file_name, FileAccess.READ)
+	var file_path = "user://saves/" + save_name + ".json"
+	if FileAccess.file_exists(file_path):
+		var save_file = FileAccess.open(file_path, FileAccess.READ)
 		if save_file:
 			var json_string = save_file.get_as_text()
 			save_file.close()
@@ -155,16 +159,32 @@ func load_save_load_panel_margin_container() -> void:
 	
 	while save_name != "":
 		if not dir.current_is_dir():
-			create_label(save_name)
+			create_button(save_name)
 		save_name = dir.get_next()
+	save_load_panel_margin_container.show()
 
-func create_label(text: String) -> void:
+func create_button(text: String) -> void:
 	var button = Button.new()
+	var file_menu_button = Button.new()
+	
 	button.text = text.replace(".json", "")
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.toggle_mode = true
 	button.connect("toggled", Callable(self, "_on_file_button_toggled").bind(button))
+	
+	file_menu_button.icon = file_button_menu_texture
+	file_menu_button.expand_icon = true
+	file_menu_button.flat = true
+	file_menu_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	file_menu_button.z_index = 1
+	file_menu_button.connect("pressed", Callable(self, "_on_file_menu_button_toggled").bind(button))
+	button.add_child(file_menu_button)
 	save_file_VBox_Container.add_child(button)
+	
+	var file_menu_button_size = button.size.y
+	file_menu_button.set_size(Vector2(file_menu_button_size, file_menu_button_size))
+	file_menu_button.position.x = button.size.x - file_menu_button_size
+	file_menu_button.hide()
 	create_h_seperator(true, 0)
 
 func create_h_seperator(empty_style_box: bool, separation: int) -> void:
@@ -176,6 +196,7 @@ func create_h_seperator(empty_style_box: bool, separation: int) -> void:
 
 func _on_file_button_toggled(button_pressed: bool, button: Button) -> void:
 	if button_pressed:
+		button.get_child(0).show()
 		save_name_line_edit.text = button.text
 		for child in save_file_VBox_Container.get_children():
 			if child.get_class() == "Button":
@@ -183,8 +204,30 @@ func _on_file_button_toggled(button_pressed: bool, button: Button) -> void:
 					continue
 				else:
 					child.button_pressed = false
+					child.get_child(0).hide()
 			else:
 				continue
+	else:
+		button.get_child(0).hide()
+		save_name_line_edit.text = ""
+
+func _on_file_menu_button_toggled(button) -> void:
+	context_menu_popup_panel.popup()
+	context_menu_popup_panel.position = get_global_mouse_position()
+
+func _on_overwrite_button_pressed() -> void:
+	var save_name = save_name_line_edit.text
+	if overwrite_button.get_meta("confirmation_type") == 1:
+		save_settings(save_name, false)
+	elif overwrite_button.get_meta("confirmation_type") == 2:
+		DirAccess.remove_absolute("user://saves/" + save_name + ".json")
+		load_save_load_panel_margin_container()
+	else:
+		save_settings(save_name, true)
+	confirmation_margin_container.hide()
+
+func _on_cancel_button_pressed() -> void:
+	confirmation_margin_container.hide()
 
 func _on_save_button_pressed() -> void:
 	save_load_panel_margin_container.show()
@@ -193,7 +236,6 @@ func _on_save_button_pressed() -> void:
 	save_name_line_edit.placeholder_text = "Enter Save Name"
 
 func _on_load_button_pressed() -> void:
-	save_load_panel_margin_container.show()
 	load_save_load_panel_margin_container()
 	save_load_panel_button.text = "Load"
 	save_name_line_edit.placeholder_text = "Enter Load Name"
@@ -208,6 +250,20 @@ func _on_save_load_panel_button_pressed() -> void:
 	else:
 		load_settings(save_name)
 
+func _on_open_file_button_pressed() -> void:
+	var save_name = save_name_line_edit.text
+	var file_path = "user://saves/" + save_name + ".json"
+	var absolute_file_path = ProjectSettings.globalize_path(file_path)
+	OS.execute("notepad.exe", [absolute_file_path])
+	context_menu_popup_panel.hide()
+
+func _on_delete_file_button_pressed() -> void:
+	confirmation_margin_container.show()
+	context_menu_popup_panel.hide()
+	var save_name = save_name_line_edit.text
+	warning_rich_text_label.text = "Warning\nDeleting file '" + save_name +"' cannot be undone.\nAre you sure you wish to continue?"
+	overwrite_button.text = "Continue"
+	overwrite_button.set_meta("confirmation_type", 2)
 
 func _on_max_points_spin_box_value_changed(value: float) -> void:
 	Global.max_points = int(value)

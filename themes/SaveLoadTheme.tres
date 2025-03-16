@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=13 format=3 uid="uid://bwwngxw7tdvhu"]
+[gd_resource type="Theme" load_steps=14 format=3 uid="uid://bwwngxw7tdvhu"]
 
 [ext_resource type="FontFile" uid="uid://6nu55r5qqx0c" path="res://fonts/JetBrainsMono-Regular.ttf" id="1_626js"]
 
@@ -117,6 +117,17 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1yn31"]
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font = ExtResource("1_626js")
 Button/styles/focus = SubResource("StyleBoxEmpty_8kfqq")
@@ -130,3 +141,4 @@ OptionButton/styles/hover = SubResource("StyleBoxFlat_o4xyj")
 OptionButton/styles/normal = SubResource("StyleBoxFlat_qmlia")
 OptionButton/styles/pressed = SubResource("StyleBoxFlat_cj2aa")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_6dbjb")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_1yn31")
