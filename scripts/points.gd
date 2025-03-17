@@ -1,6 +1,9 @@
 extends MultiMeshInstance2D
 
-@onready var point_timer: Timer = $"../PointTimer" # timer which handles steps per second
+@export var point_timer: Timer # timer which handles steps per second
+@export var sub_viewport: SubViewport # sub viewport containing finalised points to be turned into a texture
+@export var finalised_points: MultiMeshInstance2D # holds the most recent batch of generated points
+@export var finalised_points_sprite_2d: Sprite2D # texture holding all the finalised points
 
 var polygon_vertices: Array # global save of the polygon_vertices variable from main.gd, could maybe moved to global
 var polygon_previous_vertices: Array = [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)] # saving the three previous chosen vertices for constraints, default values ensure no douleups so nothing gets influenced
@@ -10,27 +13,33 @@ var previous_point := Vector2(0, 0) # previous point saved for calculating midpo
 
 var running: bool = false # are points currently being generated
 var stepping: bool = false # are the points being generated for a single step
+var batch_point_count: int = 0 # how many points in the current batch have been generated
 
 
 # called during the processing step of the main loop which happens at every frame and as fast as possible
 func _process(_delta: float) -> void:
-	if running and Global.point_count < Global.max_points: # stops generating points at max_points limit
-		if Global.unlimited_steps_per_second: # generates with no limit if true
-			for point in Global.points_per_step: # for each point in a single step, chooses random vertex, finds the midpoint and then addes the point
+	if Global.point_count < Global.max_points: # stops generating points at max_points limit
+		if running and batch_point_count < Global.multimesh_instance_batch_size: # generates all the points in the current batch
+			if Global.unlimited_steps_per_second: # generates with no limit if true
+				for point in Global.points_per_step: # for each point in a single step, chooses random vertex, finds the midpoint and then addes the point
+					var vertex: Vector2 = random_polygon_vertex(polygon_vertices)
+					previous_point = find_midpoint(previous_point, vertex)
+					add_point(previous_point, vertex_colours[vertex])
+			elif point_timer.is_stopped(): # if the generation is limited with the timer and the timer has finished, it will restart
+				point_timer.wait_time = 1 / Global.steps_per_second
+				point_timer.start()
+		elif stepping: # if it is only generating for a single step, runs the same code as before and sets stepping = false to indicate the step has finished
+			for point in Global.points_per_step:
 				var vertex: Vector2 = random_polygon_vertex(polygon_vertices)
 				previous_point = find_midpoint(previous_point, vertex)
 				add_point(previous_point, vertex_colours[vertex])
-		elif point_timer.is_stopped(): # if the generation is limited with the timer and the timer has finished, it will restart
-			point_timer.wait_time = 1 / Global.steps_per_second
-			point_timer.start()
-	elif stepping: # if it is only generating for a single step, runs the same code as before and sets stepping = false to indicate the step has finished
-		for point in Global.points_per_step:
-			var vertex: Vector2 = random_polygon_vertex(polygon_vertices)
-			previous_point = find_midpoint(previous_point, vertex)
-			add_point(previous_point, vertex_colours[vertex])
-		stepping = false
-	else: # if none of the above are valid, then the program shouldn't be considered running, basically just when its hit the max_point limit
-		running = false
+			stepping = false
+		elif running: # multimesh points are saved in duplicate multimesh and then active multimesh is reset
+			finalised_points.multimesh = multimesh.duplicate()
+			sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never so old points arent removed unless full reset
+			setup_multimesh(Global.multimesh_instance_batch_size, true)
+		else: # if none of the above are valid, then the program shouldn't be considered running, basically just when its hit the max_point limit
+			running = false
 
 # create and set up the MultiMesh, the powerhouse of my code
 func setup_multimesh(count: int, start_running: bool) -> void:
@@ -38,11 +47,12 @@ func setup_multimesh(count: int, start_running: bool) -> void:
 	multimesh.transform_format = MultiMesh.TRANSFORM_2D
 	multimesh.use_colors = true
 	multimesh.mesh = PointMesh.new() # A simple point mesh to represent each point
-	multimesh.instance_count = count # Set the instance count for the MultiMesh
+	multimesh.instance_count = count # set the number of instances in a each batch for the MultiMesh
 	
+	batch_point_count = 0 # resets batch count for new batch
 	if start_running: # if after the multimesh is setup should the program start iterating, will be false if stepping, otherwise true
 		running = true
-
+	
 # called by main.gd to parse the locked in polygon vertices to points.gd as well as dynamically assigning them colour
 func generate_point_colours(vertices) -> void:
 	polygon_vertices = vertices # sets points.gd polygon_vertices = main.gd polygon_vertices
@@ -94,9 +104,10 @@ func find_midpoint(a: Vector2, b: Vector2) -> Vector2:
 
 # adds a calculated point to the multimeshinstance
 func add_point(pos: Vector2, colour) -> void:
-	multimesh.set_instance_transform_2d(Global.point_count, Transform2D(0, pos))
-	multimesh.set_instance_color(Global.point_count, colour)
+	multimesh.set_instance_transform_2d(batch_point_count, Transform2D(0, pos))
+	multimesh.set_instance_color(batch_point_count, colour)
 	Global.point_count += 1
+	batch_point_count += 1
 
 # if the timer that controls the steps per second times out
 func _on_point_timer_timeout() -> void:

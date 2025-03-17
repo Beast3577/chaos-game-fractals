@@ -30,6 +30,10 @@ var margin := 10
 @export var point_size_spin_box: SpinBox
 @export var use_point_colour_check_button: CheckButton
 @export var use_point_opacity_check_button: CheckButton
+@export var opacity_slider: HSlider
+@export var show_starting_point_check_button: CheckButton
+@export var show_advanced_settings_check_button: CheckButton
+@export var multimesh_instance_batch_size_spin_box: SpinBox
 
 @export var save_load_panel_margin_container: MarginContainer
 @export var save_load_panel_button: Button
@@ -39,12 +43,11 @@ var margin := 10
 @export var confirmation_margin_container: MarginContainer
 @export var warning_rich_text_label: RichTextLabel
 @export var overwrite_button: Button
-@export var opacity_slider: HSlider
-@export var show_starting_point_check_button: CheckButton
 
 @export var context_menu_popup_panel: PopupPanel
 
 var file_button_menu_texture = preload("res://assets/icons/dot_menu_vertical_icon_white.png")
+var started: bool = false
 
 
 func _ready() -> void:
@@ -62,10 +65,6 @@ func _ready() -> void:
 		menu_button.set_pressed_no_signal(false)
 	
 	set_ui_values_to_global()
-	if Global.unlimited_steps_per_second:
-		steps_per_second_spin_box.hide()
-	if !Global.use_point_opacity:
-		opacity_slider.get_parent().hide()
 
 func _process(_delta: float) -> void:
 	iterations_label.text = "Iterations: " + str(Global.point_count)
@@ -132,7 +131,9 @@ func save_settings(save_name: String, confirmation: bool):
 			"use_point_colour" : Global.use_point_colour,
 			"use_point_opacity" : Global.use_point_opacity,
 			"point_opacity" : Global.point_opacity,
-			"show_starting_point" : Global.show_starting_point
+			"show_starting_point" : Global.show_starting_point,
+			"show_advanced_settings" : Global.show_advanced_settings,
+			"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size
 		}
 		if save_file:
 			save_file.store_line(JSON.stringify(save_dict, "\t"))
@@ -141,7 +142,7 @@ func save_settings(save_name: String, confirmation: bool):
 
 func load_settings(save_name: String):
 	var file_path = "user://saves/" + save_name + ".json"
-	if FileAccess.file_exists(file_path):
+	if FileAccess.file_exists(file_path) and !started:
 		var save_file = FileAccess.open(file_path, FileAccess.READ)
 		if save_file:
 			var json_string = save_file.get_as_text()
@@ -157,6 +158,15 @@ func load_settings(save_name: String):
 			set_ui_values_to_global()
 			update_polygon.emit()
 			save_load_panel_margin_container.hide()
+	else:
+		confirmation_margin_container.show()
+		warning_rich_text_label.text = "Warning\nCannot load settings when program has started generating points.\nReset before you can load settings."
+		overwrite_button.text = "Continue"
+		overwrite_button.add_theme_stylebox_override("hover", preload("res://themes/style boxes/saveload_hover_style_box_flat.tres"))
+		overwrite_button.add_theme_stylebox_override("pressed", preload("res://themes/style boxes/saveload_pressed_style_box_flat.tres"))
+		overwrite_button.add_theme_stylebox_override("normal", preload("res://themes/style boxes/saveload_normal_style_box_flat.tres"))
+		
+		overwrite_button.set_meta("confirmation_type", 3)
 
 func load_save_load_panel_margin_container() -> void:
 	save_name_line_edit.text = ""
@@ -230,8 +240,9 @@ func _on_file_menu_button_toggled(button) -> void:
 
 func _on_overwrite_button_pressed() -> void:
 	var save_name = save_name_line_edit.text
-	if overwrite_button.get_meta("confirmation_type") == 1:
-		save_settings(save_name, false)
+	if overwrite_button.get_meta("confirmation_type") == 1 or overwrite_button.get_meta("confirmation_type") == 3:
+		if overwrite_button.get_meta("confirmation_type") == 1:
+			save_settings(save_name, false)
 		overwrite_button.remove_theme_stylebox_override("hover")
 		overwrite_button.remove_theme_stylebox_override("pressed")
 		overwrite_button.remove_theme_stylebox_override("normal")
@@ -340,20 +351,43 @@ func _on_show_starting_point_check_button_toggled(toggled_on: bool) -> void:
 	Global.show_starting_point = toggled_on
 	update_polygon.emit()
 
+func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
+	Global.multimesh_instance_batch_size = value
+
+func _on_show_advanced_settings_check_button_toggled(toggled_on: bool) -> void:
+	Global.show_advanced_settings = toggled_on
+	if toggled_on:
+		multimesh_instance_batch_size_spin_box.get_parent().show()
+	else:
+		multimesh_instance_batch_size_spin_box.get_parent().hide()
+
+func disable_settings_when_running() -> void:
+	max_points_spin_box.editable = false
+	random_type_option_button.disabled = true
+	polygon_vertices_spin_box.editable = false
+	use_midpoint_check_button.disabled = true
+	point_size_spin_box.editable = false
+	use_point_colour_check_button.disabled = true
+	use_point_opacity_check_button.disabled = true
+	opacity_slider.editable = false
+	multimesh_instance_batch_size_spin_box.editable = false
+
 func set_ui_values_to_global() -> void:
 	max_points_spin_box.max_value = 999999999
 	max_points_spin_box.set_value_no_signal(Global.max_points)
 
 	unlimited_steps_per_second_check_button.set_pressed_no_signal(Global.unlimited_steps_per_second)
+	if Global.unlimited_steps_per_second:
+		steps_per_second_spin_box.hide()
 	steps_per_second_spin_box.max_value = 1000
 	steps_per_second_spin_box.set_value_no_signal(Global.steps_per_second)
 	
-	points_per_step_spin_box.max_value = 100000
+	points_per_step_spin_box.max_value = 1000000
 	points_per_step_spin_box.set_value_no_signal(Global.points_per_step)
 	points_per_step_spin_box.min_value = 1
 	
 	random_type_option_button.selected = Global.random_type
-	
+
 	polygon_vertices_spin_box.max_value = 100
 	polygon_vertices_spin_box.set_value_no_signal(Global.polygon_vertices)
 	
@@ -371,4 +405,13 @@ func set_ui_values_to_global() -> void:
 	use_point_opacity_check_button.set_pressed_no_signal(Global.use_point_opacity)
 	
 	opacity_slider.set_value_no_signal(Global.point_opacity)
+	if !Global.use_point_opacity:
+		opacity_slider.get_parent().hide()
 	show_starting_point_check_button.set_pressed_no_signal(Global.show_starting_point)
+	
+	show_advanced_settings_check_button.set_pressed_no_signal(Global.show_advanced_settings)
+	if !Global.show_advanced_settings:
+		multimesh_instance_batch_size_spin_box.get_parent().hide()
+	multimesh_instance_batch_size_spin_box.max_value = 10000000
+	multimesh_instance_batch_size_spin_box.set_value_no_signal(Global.multimesh_instance_batch_size)
+	multimesh_instance_batch_size_spin_box.min_value = 10000

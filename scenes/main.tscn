@@ -1,14 +1,36 @@
-[gd_scene load_steps=4 format=3 uid="uid://dp7e2cm3sjey7"]
+[gd_scene load_steps=5 format=3 uid="uid://dp7e2cm3sjey7"]
 
 [ext_resource type="Script" uid="uid://dpbbdsju207me" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://wv15rhdysf6y" path="res://scripts/points.gd" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bj4rb8eh71n4r" path="res://scenes/ui.tscn" id="3_sugp2"]
 
-[node name="Main" type="Node2D"]
-script = ExtResource("1_o5qli")
+[sub_resource type="ViewportTexture" id="ViewportTexture_sugp2"]
+viewport_path = NodePath("SubViewport")
 
-[node name="Points" type="MultiMeshInstance2D" parent="."]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("points", "ui", "sub_viewport")]
+script = ExtResource("1_o5qli")
+points = NodePath("ActivePoints")
+ui = NodePath("CanvasLayer/UI")
+sub_viewport = NodePath("SubViewport")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+render_target_clear_mode = 1
+render_target_update_mode = 1
+
+[node name="FinalisedPoints" type="MultiMeshInstance2D" parent="SubViewport"]
+
+[node name="FinalisedPointsSprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ViewportTexture_sugp2")
+centered = false
+
+[node name="ActivePoints" type="MultiMeshInstance2D" parent="." node_paths=PackedStringArray("point_timer", "sub_viewport", "finalised_points", "finalised_points_sprite_2d")]
 script = ExtResource("2_0wfyh")
+point_timer = NodePath("../PointTimer")
+sub_viewport = NodePath("../SubViewport")
+finalised_points = NodePath("../SubViewport/FinalisedPoints")
+finalised_points_sprite_2d = NodePath("../FinalisedPointsSprite2D")
 
 [node name="PointTimer" type="Timer" parent="."]
 one_shot = true
@@ -17,7 +39,7 @@ one_shot = true
 
 [node name="UI" parent="CanvasLayer" instance=ExtResource("3_sugp2")]
 
-[connection signal="timeout" from="PointTimer" to="Points" method="_on_point_timer_timeout"]
+[connection signal="timeout" from="PointTimer" to="ActivePoints" method="_on_point_timer_timeout"]
 [connection signal="start" from="CanvasLayer/UI" to="." method="_on_ui_start"]
 [connection signal="step" from="CanvasLayer/UI" to="." method="_on_ui_step"]
 [connection signal="stop" from="CanvasLayer/UI" to="." method="_on_ui_stop"]

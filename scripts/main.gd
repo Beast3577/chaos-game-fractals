@@ -1,8 +1,9 @@
 extends Node2D
 
 # onready node variables
-@onready var points: MultiMeshInstance2D = $Points
-@onready var ui: Control = $CanvasLayer/UI
+@export var points: MultiMeshInstance2D
+@export var ui: Control
+@export var sub_viewport: SubViewport
 
 var polygon_vertices: Array # array of Vector2s containing the screen coordinates of each vertex
 
@@ -18,6 +19,7 @@ func _ready() -> void:
 	# connect window size change signal and setup window_size variable
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	window_size = get_viewport().get_visible_rect().size
+	sub_viewport.size = window_size
 	
 	update_polygon() # initial generation and placement of the polygon vertices
 
@@ -25,6 +27,7 @@ func _ready() -> void:
 func _on_viewport_size_changed() -> void:
 	if !started:
 		window_size = get_viewport().get_visible_rect().size
+		sub_viewport.size = window_size # ensures the sub viewport containing finalised points is the same size as everything else which is based off window_size
 		update_polygon()
 
 # called when there is an input event
@@ -74,12 +77,12 @@ func update_polygon() -> void:
 # called with signal "start" from ui, starts generating points
 func _on_ui_start() -> void:
 	if !started: # if points havent started being generated it sets everything up
-		points.setup_multimesh(Global.max_points, true) # start_running = true, starts iterations
+		points.setup_multimesh(Global.multimesh_instance_batch_size, true) # start_running = true, starts iterations
 		points.generate_point_colours(polygon_vertices)
 		points.previous_point = starting_point # initialises the starting point
 	else: # otherwise the point generation is just unpausing
 		points.running = true
-	started = true
+	start()
 
 # called with signal "stop" from ui, stops generating points
 func _on_ui_stop() -> void:
@@ -88,14 +91,20 @@ func _on_ui_stop() -> void:
 # called with signal "step" from ui, runs the point generation for a single step
 func _on_ui_step() -> void:
 	if !started: # makes sure everything is setup if it hasn't already
-		points.setup_multimesh(Global.max_points, false) # start_running = false, doesn't start iterations
+		points.setup_multimesh(Global.multimesh_instance_batch_size, false) # start_running = false, doesn't start iterations
 		points.generate_point_colours(polygon_vertices)
 		points.previous_point = starting_point # initialises the starting point
 		# making sure the program knows whats going on
 		points.stepping = true
-		started = true
+		start()
 	else: # otherwise it just needs to step
 		points.stepping = true
+
+# does all the things that need to be done when the program starts generating points
+func start() -> void:
+	started = true
+	ui.started = true
+	ui.disable_settings_when_running()
 
 # called with signal "update_polygon" from ui, when the polygon needs to be updated from the ui.gd script
 func _on_ui_update_polygon() -> void:

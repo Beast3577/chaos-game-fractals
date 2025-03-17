@@ -27,23 +27,16 @@ var use_point_opacity: bool = false
 var point_opacity: float = 10
 
 var show_starting_point: bool = true
+var show_advanced_settings: bool = false
+var multimesh_instance_batch_size: float = 100000
 
 """
 TODO
-- add disabling to relevant settings
-	max points
-	random type
-	vertices
-	use midpoint
-	
-	maybe if i figure out redrawing multimeshinstance:
-	point size
-	opacity
-	
-
 - point size - may need to use a custom circle mesh
-- slow down on higher max_points
 - midpoint breaks things
+- iteration counter expands entire right menu
+- add line between chosen points
+- add unlimited max points setting
 
 - add colour pick options
 - add jiggle to settings
