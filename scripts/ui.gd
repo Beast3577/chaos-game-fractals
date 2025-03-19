@@ -6,6 +6,10 @@ signal step
 signal update_polygon
 
 var margin := 10
+@onready var active_points: MultiMeshInstance2D = $"../../ActivePoints"
+@onready var sub_viewport: SubViewport = $"../../SubViewport"
+@onready var finalised_points: MultiMeshInstance2D = $"../../SubViewport/FinalisedPoints"
+
 
 # UI elements
 @export var iterations_label: Label
@@ -32,8 +36,10 @@ var margin := 10
 @export var use_point_opacity_check_button: CheckButton
 @export var opacity_slider: HSlider
 @export var show_starting_point_check_button: CheckButton
+@export var show_lines_between_points_check_button: CheckButton
 @export var show_advanced_settings_check_button: CheckButton
 @export var multimesh_instance_batch_size_spin_box: SpinBox
+@export var show_iterations_check_button: CheckButton
 
 @export var save_load_panel_margin_container: MarginContainer
 @export var save_load_panel_button: Button
@@ -47,10 +53,14 @@ var margin := 10
 @export var context_menu_popup_panel: PopupPanel
 
 var file_button_menu_texture = preload("res://assets/icons/dot_menu_vertical_icon_white.png")
-var started: bool = false
 
 
 func _ready() -> void:
+	var saves_path = "user://saves/"
+	if not DirAccess.open(saves_path):
+		DirAccess.make_dir_absolute(saves_path)
+	save_settings("default", true)
+	
 	save_load_panel_margin_container.hide()
 	confirmation_margin_container.hide()
 	context_menu_popup_panel.hide()
@@ -87,17 +97,18 @@ func _on_step_button_pressed() -> void:
 	step.emit()
 
 func _on_reset_button_pressed() -> void:
-	Global.menu_button_pressed = menu_button.button_pressed
-	Global.scroll_horizontal = scroll_container.scroll_horizontal
-	Global.scroll_vertical = scroll_container.scroll_vertical
-	get_tree().reload_current_scene()
-	Global.point_count = 0
+	if Global.started:
+		Global.menu_button_pressed = menu_button.button_pressed
+		Global.scroll_horizontal = scroll_container.scroll_horizontal
+		Global.scroll_vertical = scroll_container.scroll_vertical
+		active_points.multimesh.instance_count = 1
+		active_points.multimesh = MultiMesh.new()
+		get_tree().reload_current_scene()
+		Global.started = false
+		Global.point_count = 0
 
 func save_settings(save_name: String, confirmation: bool):
 	var saves_path = "user://saves/"
-	if not DirAccess.open(saves_path):
-		DirAccess.make_dir_absolute(saves_path)
-	
 	var file_path = saves_path + save_name + ".json"
 	if FileAccess.file_exists(file_path) and !confirmation:
 		confirmation_margin_container.show()
@@ -132,8 +143,10 @@ func save_settings(save_name: String, confirmation: bool):
 			"use_point_opacity" : Global.use_point_opacity,
 			"point_opacity" : Global.point_opacity,
 			"show_starting_point" : Global.show_starting_point,
+			"show_line_between_points" : Global.show_line_between_points,
 			"show_advanced_settings" : Global.show_advanced_settings,
-			"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size
+			"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size,
+			"show_iterations" : Global.show_iterations
 		}
 		if save_file:
 			save_file.store_line(JSON.stringify(save_dict, "\t"))
@@ -142,7 +155,7 @@ func save_settings(save_name: String, confirmation: bool):
 
 func load_settings(save_name: String):
 	var file_path = "user://saves/" + save_name + ".json"
-	if FileAccess.file_exists(file_path) and !started:
+	if FileAccess.file_exists(file_path) and !Global.started:
 		var save_file = FileAccess.open(file_path, FileAccess.READ)
 		if save_file:
 			var json_string = save_file.get_as_text()
@@ -200,7 +213,7 @@ func create_button(text: String) -> void:
 	file_menu_button.flat = true
 	file_menu_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	file_menu_button.z_index = 1
-	file_menu_button.connect("pressed", Callable(self, "_on_file_menu_button_toggled").bind(button))
+	file_menu_button.connect("pressed", Callable(self, "_on_file_menu_button_toggled"))
 	button.add_child(file_menu_button)
 	save_file_VBox_Container.add_child(button)
 	
@@ -229,12 +242,13 @@ func _on_file_button_toggled(button_pressed: bool, button: Button) -> void:
 					child.button_pressed = false
 					child.get_child(0).hide()
 			else:
+				save_name_line_edit.text = button.text
 				continue
 	else:
 		button.get_child(0).hide()
 		save_name_line_edit.text = ""
 
-func _on_file_menu_button_toggled(button) -> void:
+func _on_file_menu_button_toggled() -> void:
 	context_menu_popup_panel.popup()
 	context_menu_popup_panel.position = get_global_mouse_position()
 
@@ -351,8 +365,11 @@ func _on_show_starting_point_check_button_toggled(toggled_on: bool) -> void:
 	Global.show_starting_point = toggled_on
 	update_polygon.emit()
 
+func _on_show_lines_between_points_check_button_toggled(toggled_on: bool) -> void:
+	Global.show_line_between_points = toggled_on
+
 func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
-	Global.multimesh_instance_batch_size = value
+	Global.multimesh_instance_batch_size = int(value)
 
 func _on_show_advanced_settings_check_button_toggled(toggled_on: bool) -> void:
 	Global.show_advanced_settings = toggled_on
@@ -360,6 +377,13 @@ func _on_show_advanced_settings_check_button_toggled(toggled_on: bool) -> void:
 		multimesh_instance_batch_size_spin_box.get_parent().show()
 	else:
 		multimesh_instance_batch_size_spin_box.get_parent().hide()
+
+func _on_show_iterations_check_button_toggled(toggled_on: bool) -> void:
+	Global.show_iterations = toggled_on
+	if toggled_on:
+		iterations_label.get_parent().show()
+	else:
+		iterations_label.get_parent().hide()
 
 func disable_settings_when_running() -> void:
 	max_points_spin_box.editable = false
@@ -400,6 +424,7 @@ func set_ui_values_to_global() -> void:
 	
 	point_size_spin_box.max_value = 100
 	point_size_spin_box.set_value_no_signal(Global.point_size)
+	point_size_spin_box.min_value = 1
 	
 	use_point_colour_check_button.set_pressed_no_signal(Global.use_point_colour)
 	use_point_opacity_check_button.set_pressed_no_signal(Global.use_point_opacity)
@@ -409,9 +434,16 @@ func set_ui_values_to_global() -> void:
 		opacity_slider.get_parent().hide()
 	show_starting_point_check_button.set_pressed_no_signal(Global.show_starting_point)
 	
+	show_lines_between_points_check_button.set_pressed_no_signal(Global.show_line_between_points)
+	
 	show_advanced_settings_check_button.set_pressed_no_signal(Global.show_advanced_settings)
 	if !Global.show_advanced_settings:
 		multimesh_instance_batch_size_spin_box.get_parent().hide()
+	
 	multimesh_instance_batch_size_spin_box.max_value = 10000000
 	multimesh_instance_batch_size_spin_box.set_value_no_signal(Global.multimesh_instance_batch_size)
 	multimesh_instance_batch_size_spin_box.min_value = 10000
+	
+	show_iterations_check_button.set_pressed_no_signal(Global.show_iterations)
+	if !Global.show_iterations:
+		iterations_label.get_parent().hide()

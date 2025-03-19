@@ -2,6 +2,7 @@ extends Node
 
 # values used for reset consistency
 var point_count: int = 0 # resets to zero
+var started: bool = false
 # reset specific persistant values
 var menu_button_pressed := false
 var scroll_horizontal: int = 0
@@ -27,18 +28,21 @@ var use_point_opacity: bool = false
 var point_opacity: float = 10
 
 var show_starting_point: bool = true
+var show_line_between_points: bool = false
+
 var show_advanced_settings: bool = false
-var multimesh_instance_batch_size: float = 100000
+var multimesh_instance_batch_size: int = 100000
+var show_iterations: bool = true
 
 """
 TODO
-- point size - may need to use a custom circle mesh
-- midpoint breaks things
-- iteration counter expands entire right menu
 - add line between chosen points
 - add unlimited max points setting
+- midpoint breaks things
 
+- add image save
 - add colour pick options
 - add jiggle to settings
-- potential infinite points with stacking multimeshinstances
+
+- add different point sprites 
 """

@@ -11,8 +11,6 @@ var margin: int = 50 # distance that vertices stay from the edge in pixels
 var window_size: Vector2 # the window size
 var starting_point := Vector2(0, 0) # default starting coordinates for first point
 
-var started: bool = false # have the points started being generated, ie. settings locked in place
-
 
 # called when the node is "ready", i.e. when both the node and its children have entered the scene tree
 func _ready() -> void:
@@ -25,14 +23,14 @@ func _ready() -> void:
 
 # called when the window is resized, updates window_size variable and updates polygon to fit
 func _on_viewport_size_changed() -> void:
-	if !started:
+	if !Global.started:
 		window_size = get_viewport().get_visible_rect().size
 		sub_viewport.size = window_size # ensures the sub viewport containing finalised points is the same size as everything else which is based off window_size
 		update_polygon()
 
 # called when there is an input event
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("mouse_right") and !started: # if left click is pressed 
+	if event.is_action_pressed("mouse_right") and !Global.started: # if left click is pressed 
 		starting_point = get_global_mouse_position() # sets the starting point to mouse position if not started generating points
 		queue_redraw() # redraws screen so point is displayed
 
@@ -76,13 +74,13 @@ func update_polygon() -> void:
 
 # called with signal "start" from ui, starts generating points
 func _on_ui_start() -> void:
-	if !started: # if points havent started being generated it sets everything up
-		points.setup_multimesh(Global.multimesh_instance_batch_size, true) # start_running = true, starts iterations
+	if !Global.started: # if points havent started being generated it sets everything up
 		points.generate_point_colours(polygon_vertices)
-		points.previous_point = starting_point # initialises the starting point
+		points.setup_multimesh(Global.multimesh_instance_batch_size, true) # start_running = true, starts iterations
+		points.previous_points[0] = starting_point # initialises the starting point
+		start()
 	else: # otherwise the point generation is just unpausing
 		points.running = true
-	start()
 
 # called with signal "stop" from ui, stops generating points
 func _on_ui_stop() -> void:
@@ -90,20 +88,17 @@ func _on_ui_stop() -> void:
 
 # called with signal "step" from ui, runs the point generation for a single step
 func _on_ui_step() -> void:
-	if !started: # makes sure everything is setup if it hasn't already
+	if !Global.started: # makes sure everything is setup if it hasn't already
 		points.setup_multimesh(Global.multimesh_instance_batch_size, false) # start_running = false, doesn't start iterations
 		points.generate_point_colours(polygon_vertices)
-		points.previous_point = starting_point # initialises the starting point
+		points.previous_points[0] = starting_point # initialises the starting point
 		# making sure the program knows whats going on
-		points.stepping = true
 		start()
-	else: # otherwise it just needs to step
-		points.stepping = true
+	points.stepping = true
 
 # does all the things that need to be done when the program starts generating points
 func start() -> void:
-	started = true
-	ui.started = true
+	Global.started = true
 	ui.disable_settings_when_running()
 
 # called with signal "update_polygon" from ui, when the polygon needs to be updated from the ui.gd script
