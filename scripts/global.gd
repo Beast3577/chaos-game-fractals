@@ -32,7 +32,6 @@ var show_iterations: bool = true
 
 """
 TODO
-- add line between chosen points
 - add unlimited max points setting
 - midpoint breaks things
 

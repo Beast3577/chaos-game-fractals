@@ -3,6 +3,7 @@ extends MultiMeshInstance2D
 @export var point_timer: Timer # timer which handles steps per second
 @export var sub_viewport: SubViewport # sub viewport containing finalised points to be turned into a texture
 @export var finalised_points: MultiMeshInstance2D # holds the most recent batch of generated points
+@export var draw_lines: Node2D
 
 var polygon_vertices: Array # global save of the polygon_vertices variable from main.gd, could maybe moved to global
 var polygon_previous_vertices: Array = [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)] # saving the three previous chosen vertices for constraints, default values ensure no douleups so nothing gets influenced
@@ -42,11 +43,6 @@ func _process(_delta: float) -> void:
 			setup_multimesh(Global.multimesh_instance_batch_size, true)
 		else: # if none of the above are valid, then the program shouldn't be considered running, basically just when its hit the max_point limit
 			running = false
-
-# called when CanvasItem has been requested to redraw (after queue_redraw() is called, either manually or by the engine)
-func _draw() -> void:
-	if Global.show_line_between_points and Global.started:
-		draw_line(previous_points[0], chosen_vertex, Color.DIM_GRAY)
 
 # create and set up the MultiMesh, the powerhouse of my code
 func setup_multimesh(count: int, start_running: bool) -> void:
@@ -131,6 +127,10 @@ func add_point(pos: Vector2, colour: Color) -> void:
 	batch_point_count += 1
 	
 	multimesh.visible_instance_count = batch_point_count # hacky solution that only shows the points that have been generated so no ghost points
+	
+	# draws line between points if dictated by user
+	if Global.show_line_between_points:
+		_on_ui_draw_line(true)
 
 # if the timer that controls the steps per second times out
 func _on_point_timer_timeout() -> void:
@@ -140,4 +140,9 @@ func _on_point_timer_timeout() -> void:
 			previous_points.pop_front()
 			previous_points.append(find_midpoint(previous_points[0], chosen_vertex))
 			add_point(previous_points[1], vertex_colours[chosen_vertex])
-			
+
+func _on_ui_draw_line(toggled) -> void:
+	if Global.started and toggled:
+		draw_lines.draw_line_between_points(previous_points[0], chosen_vertex)
+	else:
+		draw_lines.draw_line_between_points(null, null)

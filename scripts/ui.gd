@@ -5,6 +5,7 @@ signal stop
 signal step
 signal update_polygon
 signal reset
+signal draw_line
 
 var margin := 10
 
@@ -352,6 +353,7 @@ func _on_show_starting_point_check_button_toggled(toggled_on: bool) -> void:
 
 func _on_show_lines_between_points_check_button_toggled(toggled_on: bool) -> void:
 	Global.show_line_between_points = toggled_on
+	draw_line.emit(toggled_on)
 
 func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
 	Global.multimesh_instance_batch_size = int(value)

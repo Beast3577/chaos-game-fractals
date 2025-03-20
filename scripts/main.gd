@@ -5,6 +5,7 @@ extends Node2D
 @export var ui: Control
 @export var sub_viewport: SubViewport
 @export var finalised_points: MultiMeshInstance2D
+@export var draw_lines: Node2D
 
 var polygon_vertices: Array # array of Vector2s containing the screen coordinates of each vertex
 
@@ -111,8 +112,8 @@ func _on_ui_reset() -> void:
 	sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	
 	ui.disable_settings(false) # re-enable disabled settings
-	points.queue_redraw() # redraw to remove line between points
-
+	draw_lines.draw_line_between_points(null, null)
+	
 # does all the things that need to be done when the program starts generating points
 func start() -> void:
 	Global.started = true
