@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=16 format=3 uid="uid://j7anjn7mdyf8"]
+[gd_resource type="Theme" load_steps=20 format=3 uid="uid://j7anjn7mdyf8"]
 
 [ext_resource type="FontFile" uid="uid://6nu55r5qqx0c" path="res://fonts/JetBrainsMono-Regular.ttf" id="1_o4dod"]
 
@@ -46,6 +46,37 @@ content_margin_left = 5.0
 content_margin_left = 5.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7d105"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7d105"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yc1xk"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 0.6, 0.6, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j2pux"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6dbjb"]
 content_margin_left = 10.0
@@ -117,6 +148,21 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8p7q"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [resource]
 default_font = ExtResource("1_o4dod")
 Button/styles/focus = SubResource("StyleBoxEmpty_8kfqq")
@@ -127,9 +173,13 @@ CheckButton/styles/focus = SubResource("StyleBoxEmpty_xssbo")
 CheckButton/styles/hover = SubResource("StyleBoxEmpty_o4dod")
 CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_yc1xk")
 CheckButton/styles/normal = SubResource("StyleBoxEmpty_7d105")
+ColorPickerButton/styles/hover = SubResource("StyleBoxFlat_7d105")
+ColorPickerButton/styles/normal = SubResource("StyleBoxFlat_yc1xk")
+ColorPickerButton/styles/pressed = SubResource("StyleBoxFlat_j2pux")
 LineEdit/styles/focus = SubResource("StyleBoxEmpty_6dbjb")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_o4dod")
 OptionButton/styles/hover = SubResource("StyleBoxFlat_o4xyj")
 OptionButton/styles/normal = SubResource("StyleBoxFlat_qmlia")
 OptionButton/styles/pressed = SubResource("StyleBoxFlat_cj2aa")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_6dbjb")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_f8p7q")

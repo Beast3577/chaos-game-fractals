@@ -29,6 +29,7 @@ func _on_viewport_size_changed() -> void:
 		window_size = get_viewport().get_visible_rect().size
 		sub_viewport.size = window_size # ensures the sub viewport containing finalised points is the same size as everything else which is based off window_size
 		update_polygon()
+		queue_redraw()
 
 # called when there is an input event
 func _input(event: InputEvent) -> void:

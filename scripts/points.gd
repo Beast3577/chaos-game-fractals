@@ -4,6 +4,7 @@ extends MultiMeshInstance2D
 @export var sub_viewport: SubViewport # sub viewport containing finalised points to be turned into a texture
 @export var finalised_points: MultiMeshInstance2D # holds the most recent batch of generated points
 @export var draw_lines: Node2D
+@onready var finalised_points_sprite_2d: Sprite2D = $"../FinalisedPointsSprite2D"
 
 var polygon_vertices: Array # global save of the polygon_vertices variable from main.gd, could maybe moved to global
 var polygon_previous_vertices: Array = [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)] # saving the three previous chosen vertices for constraints, default values ensure no douleups so nothing gets influenced
@@ -38,9 +39,10 @@ func _process(_delta: float) -> void:
 				add_point(previous_points[1], vertex_colours[chosen_vertex])
 			stepping = false
 		elif Global.started and batch_point_count >= (Global.multimesh_instance_batch_size - Global.points_per_step): # multimesh points are saved in duplicate multimesh and then active multimesh is reset
-			finalised_points.multimesh = multimesh.duplicate()
-			sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never so old points arent removed unless full reset
-			setup_multimesh(Global.multimesh_instance_batch_size, true)
+			if running:	
+				_on_ui_finalise_points(true)
+			elif stepping:
+				_on_ui_finalise_points(false)
 		else: # the program shouldn't be considered running, which is basically just when stop has been pressed
 			running = false
 
@@ -141,8 +143,16 @@ func _on_point_timer_timeout() -> void:
 			previous_points.append(find_midpoint(previous_points[0], chosen_vertex))
 			add_point(previous_points[1], vertex_colours[chosen_vertex])
 
+# called on signal "draw_line" from ui, draws a line between necessary points
 func _on_ui_draw_line(toggled) -> void:
 	if Global.started and toggled:
 		draw_lines.draw_line_between_points(previous_points[0], chosen_vertex)
 	else:
-		draw_lines.draw_line_between_points(null, null)
+		draw_lines.draw_line_between_points(null, null) # hides the line if toggled off
+
+# called on signal "finalise_points" from ui, # multimesh points are saved in duplicate multimesh and then active multimesh is reset
+func _on_ui_finalise_points(start_running: bool) -> void:
+	if Global.started:
+		finalised_points.multimesh = multimesh.duplicate()
+		sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never so old points arent removed unless full reset
+		setup_multimesh(Global.multimesh_instance_batch_size, start_running)

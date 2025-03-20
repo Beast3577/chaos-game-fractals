@@ -26,6 +26,7 @@ var point_opacity: float = 10
 
 var show_starting_point: bool = true
 var show_line_between_points: bool = false
+var background_colour := Color(0.137, 0.137, 0.137)
 
 var show_advanced_settings: bool = false
 var multimesh_instance_batch_size: int = 100000
@@ -33,9 +34,11 @@ var show_iterations: bool = true
 
 """
 TODO
-- add colour pick options
-- add image save
+- add collapsable settings
 - make multimesh only recreate if necessary (avoid unnecessary memory allocation changes)
+- fix resize window bug
+
+- lots of code clean up
 
 - midpoint breaks things
 - add different point sprites

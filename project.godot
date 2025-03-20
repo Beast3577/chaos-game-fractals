@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 Global="*res://scripts/global.gd"
 
+[display]
+
+window/stretch/aspect="ignore"
+
 [input]
 
 play={

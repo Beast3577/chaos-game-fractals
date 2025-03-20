@@ -44,10 +44,12 @@ one_shot = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="UI" parent="CanvasLayer" instance=ExtResource("3_sugp2")]
+[node name="UI" parent="CanvasLayer" node_paths=PackedStringArray("sub_viewport") instance=ExtResource("3_sugp2")]
+sub_viewport = NodePath("../../SubViewport")
 
 [connection signal="timeout" from="PointTimer" to="ActivePoints" method="_on_point_timer_timeout"]
 [connection signal="draw_line" from="CanvasLayer/UI" to="ActivePoints" method="_on_ui_draw_line"]
+[connection signal="finalise_points" from="CanvasLayer/UI" to="ActivePoints" method="_on_ui_finalise_points"]
 [connection signal="reset" from="CanvasLayer/UI" to="." method="_on_ui_reset"]
 [connection signal="start" from="CanvasLayer/UI" to="." method="_on_ui_start"]
 [connection signal="step" from="CanvasLayer/UI" to="." method="_on_ui_step"]

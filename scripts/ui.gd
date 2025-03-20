@@ -6,6 +6,7 @@ signal step
 signal update_polygon
 signal reset
 signal draw_line
+signal finalise_points
 
 var margin := 10
 
@@ -16,6 +17,10 @@ var margin := 10
 @export var start_button: Button
 @export var step_button: Button
 @export var reset_button: Button
+@onready var save_image_button: Button = $MenuButtonMarginContainer/HBoxContainer/SaveImageButton
+
+@export var sub_viewport: SubViewport
+@onready var finalised_points_sprite_2d: Sprite2D = $"../../FinalisedPointsSprite2D"
 
 @export var settings_panel_margin_container: MarginContainer
 @export var scroll_container: ScrollContainer
@@ -37,6 +42,7 @@ var margin := 10
 @export var opacity_slider: HSlider
 @export var show_starting_point_check_button: CheckButton
 @export var show_lines_between_points_check_button: CheckButton
+@export var background_color_picker_button: ColorPickerButton
 @export var show_advanced_settings_check_button: CheckButton
 @export var multimesh_instance_batch_size_spin_box: SpinBox
 @export var show_iterations_check_button: CheckButton
@@ -45,6 +51,7 @@ var margin := 10
 @export var save_load_panel_button: Button
 @export var save_name_line_edit: LineEdit
 @export var save_file_VBox_Container: VBoxContainer
+@export var thumbnail_texture_rect: TextureRect
 
 @export var confirmation_margin_container: MarginContainer
 @export var warning_rich_text_label: RichTextLabel
@@ -53,18 +60,26 @@ var margin := 10
 @export var context_menu_popup_panel: PopupPanel
 
 var file_button_menu_texture = preload("res://assets/icons/dot_menu_vertical_icon_white.png")
-
+var save_image: Image
+var save_path: String
 
 func _ready() -> void:
-	var saves_path = "user://saves/"
-	if not DirAccess.open(saves_path):
-		DirAccess.make_dir_absolute(saves_path)
-	save_settings("default", true)
+	save_path = "user://saves/"
+	if not DirAccess.open(save_path):
+		DirAccess.make_dir_absolute(save_path)
+	save_settings("default", false)
+	
+	var pictures_path = "user://pictures/"
+	if not DirAccess.open(pictures_path):
+		DirAccess.make_dir_absolute(pictures_path)
 	
 	save_load_panel_margin_container.hide()
 	confirmation_margin_container.hide()
 	context_menu_popup_panel.hide()
 	settings_panel_margin_container.hide()
+	
+	var background_color_picker_popup_panel = background_color_picker_button.get_popup()
+	background_color_picker_popup_panel.connect("about_to_popup", Callable(self, "_on_background_color_picker_popup_panel_about_to_popup"))
 	
 	set_ui_values_to_global()
 
@@ -76,6 +91,24 @@ func _on_menu_button_toggled(toggled_on: bool) -> void:
 		settings_panel_margin_container.hide()
 	else:
 		settings_panel_margin_container.show()
+	
+func _on_save_image_button_pressed() -> void:
+	finalise_points.emit(false)
+	await RenderingServer.frame_post_draw
+	
+	load_save_load_panel_margin_container("user://pictures/")
+	save_load_panel_button.text = "Save"
+	save_load_panel_button.set_meta("origin", 2)
+	save_name_line_edit.placeholder_text = "Enter Picture Name"
+	
+	var image = finalised_points_sprite_2d.texture.get_image()
+	image.convert(Image.FORMAT_RGBA8)
+	
+	save_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
+	save_image.fill(Global.background_colour)
+	save_image.blend_rect(image, Rect2(Vector2.ZERO, image.get_size()), Vector2.ZERO)
+	
+	thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
 
 func _on_start_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
@@ -94,8 +127,12 @@ func _on_reset_button_pressed() -> void:
 		start_button.button_pressed = false
 
 func save_settings(save_name: String, confirmation: bool):
-	var saves_path = "user://saves/"
-	var file_path = saves_path + save_name + ".json"
+	var file_path: String
+	if save_path == "user://saves/":
+		file_path = save_path + save_name + ".json"
+	else:
+		file_path = save_path + save_name + ".png"
+	
 	if FileAccess.file_exists(file_path) and !confirmation:
 		confirmation_margin_container.show()
 		warning_rich_text_label.text = "Warning\nA file with the name '" + save_name +"' already exists.\nDo you wish to overwrite this file?"
@@ -111,34 +148,37 @@ func save_settings(save_name: String, confirmation: bool):
 		
 		overwrite_button.set_meta("confirmation_type", 1)
 	else:
-		var save_file = FileAccess.open(file_path, FileAccess.WRITE)
-		
-		var save_dict = {
-			"unlimited_max_points" : Global.unlimited_max_points,
-			"max_points" : Global.max_points,
-			"unlimited_steps_per_second" : Global.unlimited_steps_per_second,
-			"steps_per_second" : Global.steps_per_second,
-			"points_per_step" : Global.points_per_step,
-			"random_type" : Global.random_type,
-			"polygon_vertices" : Global.polygon_vertices,
-			"show_polygon_vertices" : Global.show_polygon_vertices,
-			"show_polygon_lines" : Global.show_polygon_lines,
-			"use_midpoint" : Global.use_midpoint,
-			"polygon_vertex_size" : Global.polygon_vertex_size,
-			"point_size" : Global.point_size,
-			"use_point_colour" : Global.use_point_colour,
-			"use_point_opacity" : Global.use_point_opacity,
-			"point_opacity" : Global.point_opacity,
-			"show_starting_point" : Global.show_starting_point,
-			"show_line_between_points" : Global.show_line_between_points,
-			"show_advanced_settings" : Global.show_advanced_settings,
-			"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size,
-			"show_iterations" : Global.show_iterations
-		}
-		if save_file:
-			save_file.store_line(JSON.stringify(save_dict, "\t"))
-			save_file.close()
-		load_save_load_panel_margin_container()
+		if save_path == "user://saves/":
+			var save_file = FileAccess.open(file_path, FileAccess.WRITE)
+			
+			var save_dict = {
+				"unlimited_max_points" : Global.unlimited_max_points,
+				"max_points" : Global.max_points,
+				"unlimited_steps_per_second" : Global.unlimited_steps_per_second,
+				"steps_per_second" : Global.steps_per_second,
+				"points_per_step" : Global.points_per_step,
+				"random_type" : Global.random_type,
+				"polygon_vertices" : Global.polygon_vertices,
+				"show_polygon_vertices" : Global.show_polygon_vertices,
+				"show_polygon_lines" : Global.show_polygon_lines,
+				"use_midpoint" : Global.use_midpoint,
+				"polygon_vertex_size" : Global.polygon_vertex_size,
+				"point_size" : Global.point_size,
+				"use_point_colour" : Global.use_point_colour,
+				"use_point_opacity" : Global.use_point_opacity,
+				"point_opacity" : Global.point_opacity,
+				"show_starting_point" : Global.show_starting_point,
+				"show_line_between_points" : Global.show_line_between_points,
+				"show_advanced_settings" : Global.show_advanced_settings,
+				"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size,
+				"show_iterations" : Global.show_iterations
+			}
+			if save_file:
+				save_file.store_line(JSON.stringify(save_dict, "\t"))
+				save_file.close()
+		else:
+			save_image.save_png(file_path)
+		load_save_load_panel_margin_container(save_path)
 
 func load_settings(save_name: String):
 	var file_path = "user://saves/" + save_name + ".json"
@@ -168,14 +208,14 @@ func load_settings(save_name: String):
 		
 		overwrite_button.set_meta("confirmation_type", 3)
 
-func load_save_load_panel_margin_container() -> void:
+func load_save_load_panel_margin_container(path: String) -> void:
+	save_path = path
 	save_name_line_edit.text = ""
 	
 	for child in save_file_VBox_Container.get_children():
 		child.queue_free()
 	
-	var saves_path = "user://saves/"
-	var dir = DirAccess.open(saves_path)
+	var dir = DirAccess.open(path)
 	
 	dir.list_dir_begin()
 	var save_name = dir.get_next()
@@ -185,12 +225,17 @@ func load_save_load_panel_margin_container() -> void:
 			create_button(save_name)
 		save_name = dir.get_next()
 	save_load_panel_margin_container.show()
+	if save_path != "user://pictures/":
+		thumbnail_texture_rect.get_parent().hide()
+	else:
+		thumbnail_texture_rect.get_parent().show()
 
 func create_button(text: String) -> void:
 	var button = Button.new()
 	var file_menu_button = Button.new()
 	
 	button.text = text.replace(".json", "")
+	button.text = text.replace(".png", "")
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.toggle_mode = true
 	button.connect("toggled", Callable(self, "_on_file_button_toggled").bind(button))
@@ -221,10 +266,15 @@ func _on_file_button_toggled(button_pressed: bool, button: Button) -> void:
 	if button_pressed:
 		button.get_child(0).show()
 		save_name_line_edit.text = button.text
+
 		for child in save_file_VBox_Container.get_children():
 			if child.get_class() == "Button":
 				if child == button:
-					continue
+					if save_path == "user://pictures/":
+						var file_path = save_path + save_name_line_edit.text + ".png"
+						var image = Image.load_from_file(file_path)
+						await RenderingServer.frame_post_draw
+						thumbnail_texture_rect.texture = ImageTexture.create_from_image(image)
 				else:
 					child.button_pressed = false
 					child.get_child(0).hide()
@@ -234,6 +284,7 @@ func _on_file_button_toggled(button_pressed: bool, button: Button) -> void:
 	else:
 		button.get_child(0).hide()
 		save_name_line_edit.text = ""
+		thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
 
 func _on_file_menu_button_toggled() -> void:
 	context_menu_popup_panel.popup()
@@ -248,8 +299,11 @@ func _on_overwrite_button_pressed() -> void:
 		overwrite_button.remove_theme_stylebox_override("pressed")
 		overwrite_button.remove_theme_stylebox_override("normal")
 	elif overwrite_button.get_meta("confirmation_type") == 2:
-		DirAccess.remove_absolute("user://saves/" + save_name + ".json")
-		load_save_load_panel_margin_container()
+		if save_path == "user://saves/":
+			DirAccess.remove_absolute(save_path + save_name + ".json")
+		else:DirAccess.remove_absolute(save_path + save_name + ".png")
+			
+		load_save_load_panel_margin_container(save_path)
 	else:
 		save_settings(save_name, true)
 	confirmation_margin_container.hide()
@@ -258,14 +312,15 @@ func _on_cancel_button_pressed() -> void:
 	confirmation_margin_container.hide()
 
 func _on_save_button_pressed() -> void:
-	save_load_panel_margin_container.show()
-	load_save_load_panel_margin_container()
+	load_save_load_panel_margin_container("user://saves/")
 	save_load_panel_button.text = "Save"
+	save_load_panel_button.set_meta("origin", 0)
 	save_name_line_edit.placeholder_text = "Enter Save Name"
 
 func _on_load_button_pressed() -> void:
-	load_save_load_panel_margin_container()
+	load_save_load_panel_margin_container("user://saves/")
 	save_load_panel_button.text = "Load"
+	save_load_panel_button.set_meta("origin", 1)
 	save_name_line_edit.placeholder_text = "Enter Load Name"
 
 func _on_cancel_panel_button_pressed() -> void:
@@ -273,16 +328,23 @@ func _on_cancel_panel_button_pressed() -> void:
 
 func _on_save_load_panel_button_pressed() -> void:
 	var save_name = save_name_line_edit.text
-	if save_load_panel_button.text == "Save":
+	if save_load_panel_button.get_meta("origin") == 1:
+		load_settings(save_name)
+	elif save_load_panel_button.get_meta("origin") == 2:
 		save_settings(save_name, false)
 	else:
-		load_settings(save_name)
+		save_settings(save_name, false)
 
 func _on_open_file_button_pressed() -> void:
 	var save_name = save_name_line_edit.text
-	var file_path = "user://saves/" + save_name + ".json"
-	var absolute_file_path = ProjectSettings.globalize_path(file_path)
-	OS.execute("notepad.exe", [absolute_file_path])
+	if save_path == "user://saves/":
+		var file_path = save_path + save_name + ".json"
+		var absolute_file_path = ProjectSettings.globalize_path(file_path)
+		OS.execute("notepad.exe", [absolute_file_path])
+	else:
+		var file_path = save_path + save_name + ".png"
+		var absolute_file_path = ProjectSettings.globalize_path(file_path)
+		OS.shell_open(absolute_file_path)
 	context_menu_popup_panel.hide()
 
 func _on_delete_file_button_pressed() -> void:
@@ -363,6 +425,10 @@ func _on_show_lines_between_points_check_button_toggled(toggled_on: bool) -> voi
 	Global.show_line_between_points = toggled_on
 	draw_line.emit(toggled_on)
 
+func _on_background_color_picker_button_color_changed(color: Color) -> void:
+	Global.background_colour = color
+	RenderingServer.set_default_clear_color(color)
+
 func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
 	Global.multimesh_instance_batch_size = int(value)
 	points_per_step_spin_box.max_value = Global.multimesh_instance_batch_size
@@ -431,6 +497,8 @@ func set_ui_values_to_global() -> void:
 	show_starting_point_check_button.set_pressed_no_signal(Global.show_starting_point)
 	
 	show_lines_between_points_check_button.set_pressed_no_signal(Global.show_line_between_points)
+	
+	background_color_picker_button.color = Global.background_colour
 	
 	show_advanced_settings_check_button.set_pressed_no_signal(Global.show_advanced_settings)
 	if !Global.show_advanced_settings:
