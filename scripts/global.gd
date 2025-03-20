@@ -33,12 +33,10 @@ var show_iterations: bool = true
 
 """
 TODO
-- midpoint breaks things
-
-- add image save
 - add colour pick options
-- add jiggle to settings
+- add image save
 - make multimesh only recreate if necessary (avoid unnecessary memory allocation changes)
 
+- midpoint breaks things
 - add different point sprites
 """

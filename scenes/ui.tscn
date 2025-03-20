@@ -190,6 +190,11 @@ theme_override_styles/separator = SubResource("StyleBoxLine_qsv74")
 layout_mode = 2
 text = "Max Points"
 
+[node name="HSeparator19" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_qsv74")
+
 [node name="UnlimitedMaxPointsCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Unlimited"

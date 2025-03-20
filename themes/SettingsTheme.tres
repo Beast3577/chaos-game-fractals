@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=12 format=3 uid="uid://j7anjn7mdyf8"]
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://j7anjn7mdyf8"]
 
 [ext_resource type="FontFile" uid="uid://6nu55r5qqx0c" path="res://fonts/JetBrainsMono-Regular.ttf" id="1_o4dod"]
 
@@ -39,10 +39,30 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xssbo"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o4dod"]
+content_margin_left = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yc1xk"]
+content_margin_left = 5.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7d105"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6dbjb"]
+content_margin_left = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4dod"]
+content_margin_left = 5.0
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+shadow_size = 1
+shadow_offset = Vector2(0, 2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4xyj"]
-content_margin_left = 3.0
+content_margin_left = 7.0
 content_margin_top = 3.0
 content_margin_right = 3.0
 content_margin_bottom = 3.0
@@ -51,9 +71,7 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
-expand_margin_left = 1.0
 expand_margin_top = 1.0
-expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 shadow_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 shadow_size = 1
@@ -69,16 +87,14 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
-expand_margin_left = 1.0
 expand_margin_top = 1.0
-expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 shadow_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 shadow_size = 1
 shadow_offset = Vector2(0, 2)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cj2aa"]
-content_margin_left = 3.0
+content_margin_left = 7.0
 content_margin_top = 3.0
 content_margin_right = 3.0
 content_margin_bottom = 3.0
@@ -87,9 +103,7 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
-expand_margin_left = 1.0
 expand_margin_top = 1.0
-expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6dbjb"]
@@ -110,7 +124,11 @@ Button/styles/hover = SubResource("StyleBoxFlat_ol8wj")
 Button/styles/normal = SubResource("StyleBoxFlat_8kfqq")
 Button/styles/pressed = SubResource("StyleBoxFlat_xssbo")
 CheckButton/styles/focus = SubResource("StyleBoxEmpty_xssbo")
+CheckButton/styles/hover = SubResource("StyleBoxEmpty_o4dod")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_yc1xk")
+CheckButton/styles/normal = SubResource("StyleBoxEmpty_7d105")
 LineEdit/styles/focus = SubResource("StyleBoxEmpty_6dbjb")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_o4dod")
 OptionButton/styles/hover = SubResource("StyleBoxFlat_o4xyj")
 OptionButton/styles/normal = SubResource("StyleBoxFlat_qmlia")
 OptionButton/styles/pressed = SubResource("StyleBoxFlat_cj2aa")
