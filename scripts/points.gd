@@ -19,7 +19,7 @@ var batch_point_count: int = 0 # how many points in the current batch have been 
 
 # called during the processing step of the main loop which happens at every frame and as fast as possible
 func _process(_delta: float) -> void:
-	if Global.point_count < Global.max_points: # stops generating points at max_points limit
+	if Global.unlimited_max_points or Global.point_count < Global.max_points: # stops generating points at max_points limit
 		if running and batch_point_count <= (Global.multimesh_instance_batch_size - Global.points_per_step): # generates all the points in the current batch
 			if Global.unlimited_steps_per_second: # generates with no limit if true
 				for point in Global.points_per_step: # for each point in a single step, chooses random vertex, finds the midpoint and then addes the point
@@ -41,7 +41,7 @@ func _process(_delta: float) -> void:
 			finalised_points.multimesh = multimesh.duplicate()
 			sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never so old points arent removed unless full reset
 			setup_multimesh(Global.multimesh_instance_batch_size, true)
-		else: # if none of the above are valid, then the program shouldn't be considered running, basically just when its hit the max_point limit
+		else: # the program shouldn't be considered running, which is basically just when stop has been pressed
 			running = false
 
 # create and set up the MultiMesh, the powerhouse of my code

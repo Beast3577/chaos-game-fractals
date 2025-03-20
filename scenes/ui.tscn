@@ -32,7 +32,7 @@ thickness = 2
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qsv74"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_margin_container", "scroll_container", "max_points_spin_box", "unlimited_steps_per_second_check_button", "steps_per_second_spin_box", "points_per_step_spin_box", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "use_midpoint_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "opacity_slider", "show_starting_point_check_button", "show_lines_between_points_check_button", "show_advanced_settings_check_button", "multimesh_instance_batch_size_spin_box", "show_iterations_check_button", "save_load_panel_margin_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container", "confirmation_margin_container", "warning_rich_text_label", "overwrite_button", "context_menu_popup_panel")]
+[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_margin_container", "scroll_container", "unlimited_max_points_check_button", "max_points_spin_box", "unlimited_steps_per_second_check_button", "steps_per_second_spin_box", "points_per_step_spin_box", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "use_midpoint_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "opacity_slider", "show_starting_point_check_button", "show_lines_between_points_check_button", "show_advanced_settings_check_button", "multimesh_instance_batch_size_spin_box", "show_iterations_check_button", "save_load_panel_margin_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container", "confirmation_margin_container", "warning_rich_text_label", "overwrite_button", "context_menu_popup_panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,6 +47,7 @@ step_button = NodePath("RightSideMarginContainer/VBoxContainer/MarginContainer/V
 reset_button = NodePath("RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/ResetButton")
 settings_panel_margin_container = NodePath("SettingsPanelMarginContainer")
 scroll_container = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer")
+unlimited_max_points_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedMaxPointsCheckButton")
 max_points_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MaxPointsSpinBox")
 unlimited_steps_per_second_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton")
 steps_per_second_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/StepsPerSecondSpinBox")
@@ -188,6 +189,10 @@ theme_override_styles/separator = SubResource("StyleBoxLine_qsv74")
 [node name="MaxPointsLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Max Points"
+
+[node name="UnlimitedMaxPointsCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Unlimited"
 
 [node name="MaxPointsSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -637,9 +642,9 @@ theme = ExtResource("10_7dvkv")
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = 2.0
+offset_left = -157.0
 offset_top = 2.0
-offset_right = 157.0
+offset_right = -2.0
 offset_bottom = 78.0
 grow_horizontal = 0
 theme_override_constants/margin_left = 10
@@ -667,6 +672,7 @@ alignment = 0
 [connection signal="toggled" from="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_toggled"]
 [connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/StepButton" to="." method="_on_step_button_pressed"]
 [connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedMaxPointsCheckButton" to="." method="_on_unlimited_max_points_check_button_toggled"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MaxPointsSpinBox" to="." method="_on_max_points_spin_box_value_changed"]
 [connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/UnlimitedStepsPerSecondCheckButton" to="." method="_on_unlimited_steps_per_second_check_button_toggled"]
 [connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/StepsPerSecondSpinBox" to="." method="_on_steps_per_second_spin_box_value_changed"]

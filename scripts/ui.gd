@@ -20,6 +20,7 @@ var margin := 10
 @export var settings_panel_margin_container: MarginContainer
 @export var scroll_container: ScrollContainer
 
+@export var unlimited_max_points_check_button: CheckButton
 @export var max_points_spin_box: SpinBox
 @export var unlimited_steps_per_second_check_button: CheckButton
 @export var steps_per_second_spin_box: SpinBox
@@ -92,7 +93,6 @@ func _on_reset_button_pressed() -> void:
 		reset.emit()
 		start_button.button_pressed = false
 
-
 func save_settings(save_name: String, confirmation: bool):
 	var saves_path = "user://saves/"
 	var file_path = saves_path + save_name + ".json"
@@ -114,6 +114,7 @@ func save_settings(save_name: String, confirmation: bool):
 		var save_file = FileAccess.open(file_path, FileAccess.WRITE)
 		
 		var save_dict = {
+			"unlimited_max_points" : Global.unlimited_max_points,
 			"max_points" : Global.max_points,
 			"unlimited_steps_per_second" : Global.unlimited_steps_per_second,
 			"steps_per_second" : Global.steps_per_second,
@@ -291,6 +292,13 @@ func _on_delete_file_button_pressed() -> void:
 	warning_rich_text_label.text = "Warning\nDeleting file '" + save_name +"' cannot be undone.\nAre you sure you wish to continue?"
 	overwrite_button.text = "Continue"
 	overwrite_button.set_meta("confirmation_type", 2)
+
+func _on_unlimited_max_points_check_button_toggled(toggled_on: bool) -> void:
+	Global.unlimited_max_points = toggled_on
+	if toggled_on:
+		max_points_spin_box.hide()
+	else:
+		max_points_spin_box.show()
 
 func _on_max_points_spin_box_value_changed(value: float) -> void:
 	Global.max_points = int(value)

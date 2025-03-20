@@ -5,6 +5,7 @@ var point_count: int = 0 # resets to zero
 var started: bool = false
 
 # Default Settings
+var unlimited_max_points: bool = false
 var max_points: int = 1000000
 var unlimited_steps_per_second: bool = false
 var steps_per_second: float = 1
@@ -32,7 +33,6 @@ var show_iterations: bool = true
 
 """
 TODO
-- add unlimited max points setting
 - midpoint breaks things
 
 - add image save
