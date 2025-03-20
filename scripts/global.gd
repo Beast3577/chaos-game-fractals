@@ -3,10 +3,6 @@ extends Node
 # values used for reset consistency
 var point_count: int = 0 # resets to zero
 var started: bool = false
-# reset specific persistant values
-var menu_button_pressed := false
-var scroll_horizontal: int = 0
-var scroll_vertical: int = 0
 
 # Default Settings
 var max_points: int = 1000000
@@ -43,6 +39,7 @@ TODO
 - add image save
 - add colour pick options
 - add jiggle to settings
+- make multimesh only recreate if necessary (avoid unnecessary memory allocation changes)
 
-- add different point sprites 
+- add different point sprites
 """

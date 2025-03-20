@@ -4,6 +4,7 @@ extends Node2D
 @export var points: MultiMeshInstance2D
 @export var ui: Control
 @export var sub_viewport: SubViewport
+@export var finalised_points: MultiMeshInstance2D
 
 var polygon_vertices: Array # array of Vector2s containing the screen coordinates of each vertex
 
@@ -96,10 +97,26 @@ func _on_ui_step() -> void:
 		start()
 	points.stepping = true
 
+# called with signal "reset" from ui, resets various things for the program to reset correctly
+func _on_ui_reset() -> void:
+	# state of simulation variables
+	points.running = false
+	Global.started = false
+	Global.point_count = 0
+	
+	points.multimesh.visible_instance_count = 0 # hides all instances so the ghost instances are hidden
+	finalised_points.multimesh = points.multimesh.duplicate() # applies the same to finalised points
+	# clears sub_viewport so the finalised points are properly hidden
+	sub_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+	sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	
+	ui.disable_settings(false) # re-enable disabled settings
+	points.queue_redraw() # redraw to remove line between points
+
 # does all the things that need to be done when the program starts generating points
 func start() -> void:
 	Global.started = true
-	ui.disable_settings_when_running()
+	ui.disable_settings(true)
 
 # called with signal "update_polygon" from ui, when the polygon needs to be updated from the ui.gd script
 func _on_ui_update_polygon() -> void:

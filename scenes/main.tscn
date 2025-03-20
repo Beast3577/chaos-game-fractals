@@ -7,11 +7,12 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_sugp2"]
 viewport_path = NodePath("SubViewport")
 
-[node name="Main" type="Node2D" node_paths=PackedStringArray("points", "ui", "sub_viewport")]
+[node name="Main" type="Node2D" node_paths=PackedStringArray("points", "ui", "sub_viewport", "finalised_points")]
 script = ExtResource("1_o5qli")
 points = NodePath("ActivePoints")
 ui = NodePath("CanvasLayer/UI")
 sub_viewport = NodePath("SubViewport")
+finalised_points = NodePath("SubViewport/FinalisedPoints")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
@@ -25,12 +26,11 @@ render_target_update_mode = 1
 texture = SubResource("ViewportTexture_sugp2")
 centered = false
 
-[node name="ActivePoints" type="MultiMeshInstance2D" parent="." node_paths=PackedStringArray("point_timer", "sub_viewport", "finalised_points", "finalised_points_sprite_2d")]
+[node name="ActivePoints" type="MultiMeshInstance2D" parent="." node_paths=PackedStringArray("point_timer", "sub_viewport", "finalised_points")]
 script = ExtResource("2_0wfyh")
 point_timer = NodePath("../PointTimer")
 sub_viewport = NodePath("../SubViewport")
 finalised_points = NodePath("../SubViewport/FinalisedPoints")
-finalised_points_sprite_2d = NodePath("../FinalisedPointsSprite2D")
 
 [node name="PointTimer" type="Timer" parent="."]
 one_shot = true
@@ -40,6 +40,7 @@ one_shot = true
 [node name="UI" parent="CanvasLayer" instance=ExtResource("3_sugp2")]
 
 [connection signal="timeout" from="PointTimer" to="ActivePoints" method="_on_point_timer_timeout"]
+[connection signal="reset" from="CanvasLayer/UI" to="." method="_on_ui_reset"]
 [connection signal="start" from="CanvasLayer/UI" to="." method="_on_ui_start"]
 [connection signal="step" from="CanvasLayer/UI" to="." method="_on_ui_step"]
 [connection signal="stop" from="CanvasLayer/UI" to="." method="_on_ui_stop"]

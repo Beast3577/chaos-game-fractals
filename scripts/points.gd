@@ -3,7 +3,6 @@ extends MultiMeshInstance2D
 @export var point_timer: Timer # timer which handles steps per second
 @export var sub_viewport: SubViewport # sub viewport containing finalised points to be turned into a texture
 @export var finalised_points: MultiMeshInstance2D # holds the most recent batch of generated points
-@export var finalised_points_sprite_2d: Sprite2D # texture holding all the finalised points
 
 var polygon_vertices: Array # global save of the polygon_vertices variable from main.gd, could maybe moved to global
 var polygon_previous_vertices: Array = [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)] # saving the three previous chosen vertices for constraints, default values ensure no douleups so nothing gets influenced
@@ -37,7 +36,7 @@ func _process(_delta: float) -> void:
 				previous_points.append(find_midpoint(previous_points[0], chosen_vertex))
 				add_point(previous_points[1], vertex_colours[chosen_vertex])
 			stepping = false
-		elif batch_point_count >= (Global.multimesh_instance_batch_size - Global.points_per_step): # multimesh points are saved in duplicate multimesh and then active multimesh is reset
+		elif Global.started and batch_point_count >= (Global.multimesh_instance_batch_size - Global.points_per_step): # multimesh points are saved in duplicate multimesh and then active multimesh is reset
 			finalised_points.multimesh = multimesh.duplicate()
 			sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never so old points arent removed unless full reset
 			setup_multimesh(Global.multimesh_instance_batch_size, true)
@@ -46,7 +45,7 @@ func _process(_delta: float) -> void:
 
 # called when CanvasItem has been requested to redraw (after queue_redraw() is called, either manually or by the engine)
 func _draw() -> void:
-	if Global.show_line_between_points:
+	if Global.show_line_between_points and Global.started:
 		draw_line(previous_points[0], chosen_vertex, Color.DIM_GRAY)
 
 # create and set up the MultiMesh, the powerhouse of my code
@@ -67,6 +66,8 @@ func setup_multimesh(count: int, start_running: bool) -> void:
 	
 	multimesh.mesh = quad_mesh # apply mesh
 	texture = preload("res://assets/point textures/full_circle.png") # apply texture
+	
+	multimesh.instance_count = count
 	
 	batch_point_count = 0 # resets batch count for new batch
 	if start_running: # if after the multimesh is setup should the program start iterating, will be false if stepping, otherwise true
@@ -125,8 +126,11 @@ func find_midpoint(a: Vector2, b: Vector2) -> Vector2:
 func add_point(pos: Vector2, colour: Color) -> void:
 	multimesh.set_instance_transform_2d(batch_point_count, Transform2D(0, pos))
 	multimesh.set_instance_color(batch_point_count, colour)
+	# adds to batch and total point count
 	Global.point_count += 1
 	batch_point_count += 1
+	
+	multimesh.visible_instance_count = batch_point_count # hacky solution that only shows the points that have been generated so no ghost points
 
 # if the timer that controls the steps per second times out
 func _on_point_timer_timeout() -> void:
@@ -136,3 +140,4 @@ func _on_point_timer_timeout() -> void:
 			previous_points.pop_front()
 			previous_points.append(find_midpoint(previous_points[0], chosen_vertex))
 			add_point(previous_points[1], vertex_colours[chosen_vertex])
+			

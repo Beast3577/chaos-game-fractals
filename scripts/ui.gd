@@ -4,11 +4,9 @@ signal start
 signal stop
 signal step
 signal update_polygon
+signal reset
 
 var margin := 10
-@onready var active_points: MultiMeshInstance2D = $"../../ActivePoints"
-@onready var sub_viewport: SubViewport = $"../../SubViewport"
-@onready var finalised_points: MultiMeshInstance2D = $"../../SubViewport/FinalisedPoints"
 
 
 # UI elements
@@ -64,15 +62,7 @@ func _ready() -> void:
 	save_load_panel_margin_container.hide()
 	confirmation_margin_container.hide()
 	context_menu_popup_panel.hide()
-
-	if Global.menu_button_pressed:
-		settings_panel_margin_container.show()
-		scroll_container.scroll_horizontal = Global.scroll_horizontal
-		scroll_container.scroll_vertical = Global.scroll_vertical
-		menu_button.set_pressed_no_signal(true)
-	else:
-		settings_panel_margin_container.hide()
-		menu_button.set_pressed_no_signal(false)
+	settings_panel_margin_container.hide()
 	
 	set_ui_values_to_global()
 
@@ -98,14 +88,9 @@ func _on_step_button_pressed() -> void:
 
 func _on_reset_button_pressed() -> void:
 	if Global.started:
-		Global.menu_button_pressed = menu_button.button_pressed
-		Global.scroll_horizontal = scroll_container.scroll_horizontal
-		Global.scroll_vertical = scroll_container.scroll_vertical
-		active_points.multimesh.instance_count = 1
-		active_points.multimesh = MultiMesh.new()
-		get_tree().reload_current_scene()
-		Global.started = false
-		Global.point_count = 0
+		reset.emit()
+		start_button.button_pressed = false
+
 
 func save_settings(save_name: String, confirmation: bool):
 	var saves_path = "user://saves/"
@@ -370,6 +355,7 @@ func _on_show_lines_between_points_check_button_toggled(toggled_on: bool) -> voi
 
 func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
 	Global.multimesh_instance_batch_size = int(value)
+	points_per_step_spin_box.max_value = Global.multimesh_instance_batch_size
 
 func _on_show_advanced_settings_check_button_toggled(toggled_on: bool) -> void:
 	Global.show_advanced_settings = toggled_on
@@ -385,16 +371,16 @@ func _on_show_iterations_check_button_toggled(toggled_on: bool) -> void:
 	else:
 		iterations_label.get_parent().hide()
 
-func disable_settings_when_running() -> void:
-	max_points_spin_box.editable = false
-	random_type_option_button.disabled = true
-	polygon_vertices_spin_box.editable = false
-	use_midpoint_check_button.disabled = true
-	point_size_spin_box.editable = false
-	use_point_colour_check_button.disabled = true
-	use_point_opacity_check_button.disabled = true
-	opacity_slider.editable = false
-	multimesh_instance_batch_size_spin_box.editable = false
+func disable_settings(disable: bool) -> void:
+	max_points_spin_box.editable = !disable
+	random_type_option_button.disabled = disable
+	polygon_vertices_spin_box.editable = !disable
+	use_midpoint_check_button.disabled = disable
+	point_size_spin_box.editable = !disable
+	use_point_colour_check_button.disabled = disable
+	use_point_opacity_check_button.disabled = disable
+	opacity_slider.editable = !disable
+	multimesh_instance_batch_size_spin_box.editable = !disable
 
 func set_ui_values_to_global() -> void:
 	max_points_spin_box.max_value = 999999999
@@ -406,7 +392,7 @@ func set_ui_values_to_global() -> void:
 	steps_per_second_spin_box.max_value = 1000
 	steps_per_second_spin_box.set_value_no_signal(Global.steps_per_second)
 	
-	points_per_step_spin_box.max_value = 1000000
+	points_per_step_spin_box.max_value = Global.multimesh_instance_batch_size
 	points_per_step_spin_box.set_value_no_signal(Global.points_per_step)
 	points_per_step_spin_box.min_value = 1
 	
