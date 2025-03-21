@@ -1,15 +1,15 @@
 extends Node2D
 
-# onready node variables
+# script variables
 @export var points: MultiMeshInstance2D
 @export var ui: Control
-@export var sub_viewport: SubViewport
-@export var finalised_points: MultiMeshInstance2D
 @export var draw_lines: Node2D
+# node variables
+@export var sub_viewport: SubViewport # sub viewport containing finalised points to be turned into a texture
+@export var finalised_points_sprite_2d: Sprite2D # holds texture containing old points
 
 var polygon_vertices: Array # array of Vector2s containing the screen coordinates of each vertex
 
-var margin: int = 50 # distance that vertices stay from the edge in pixels
 var window_size: Vector2 # the window size
 var starting_point := Vector2(0, 0) # default starting coordinates for first point
 
@@ -19,21 +19,22 @@ func _ready() -> void:
 	# connect window size change signal and setup window_size variable
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	window_size = get_viewport().get_visible_rect().size
-	sub_viewport.size = window_size
+	sub_viewport.size = window_size # sets sub_viewport size to be the same as the window
 	
 	update_polygon() # initial generation and placement of the polygon vertices
 
 # called when the window is resized, updates window_size variable and updates polygon to fit
 func _on_viewport_size_changed() -> void:
-	if !Global.started:
+	if !Global.started: # will only update things if simulation hasn't started, ensuring everything gets locked otherwise
 		window_size = get_viewport().get_visible_rect().size
 		sub_viewport.size = window_size # ensures the sub viewport containing finalised points is the same size as everything else which is based off window_size
+		# updates the things that need to fit the screen size
 		update_polygon()
-		queue_redraw()
+		queue_redraw() # updates polygon vertices and lines
 
 # called when there is an input event
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("mouse_right") and !Global.started: # if left click is pressed 
+	if event.is_action_pressed("mouse_right") and !Global.started: # if right click is pressed 
 		starting_point = get_global_mouse_position() # sets the starting point to mouse position if not started generating points
 		queue_redraw() # redraws screen so point is displayed
 
@@ -72,7 +73,7 @@ func generate_polygon_vertices(n: float, radius: float, center: Vector2) -> Arra
 
 # main function for handling the generation and drawing of the polygon everytime it needs to be redrawn for various reasons
 func update_polygon() -> void:
-	polygon_vertices = generate_polygon_vertices(Global.polygon_vertices, min(window_size.x, window_size.y)/2 - margin, Vector2(window_size.x/2, window_size.y/2))
+	polygon_vertices = generate_polygon_vertices(Global.polygon_vertices, min(window_size.x, window_size.y)/2 - 50, Vector2(window_size.x/2, window_size.y/2)) # 50 is the distance that vertices stay from the edge in pixels
 	queue_redraw()
 
 # called with signal "start" from ui, starts generating points
@@ -99,26 +100,25 @@ func _on_ui_step() -> void:
 		start()
 	points.stepping = true
 
+# does all the things that need to be done when the program starts generating points
+func start() -> void:
+	Global.started = true
+	ui.disable_settings(true) # disables necessary settings
+
 # called with signal "reset" from ui, resets various things for the program to reset correctly
 func _on_ui_reset() -> void:
 	# state of simulation variables
 	points.running = false
 	Global.started = false
 	Global.point_count = 0
+	points.previous_points = [Vector2(0, 0), Vector2(0, 0)]
 	
 	points.multimesh.visible_instance_count = 0 # hides all instances so the ghost instances are hidden
-	finalised_points.multimesh = points.multimesh.duplicate() # applies the same to finalised points
-	# clears sub_viewport so the finalised points are properly hidden
-	sub_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
-	sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	
+	finalised_points_sprite_2d.texture = ImageTexture.new() # resets image buffer texture
+	sub_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE # clears sub_viewport of old points
 	ui.disable_settings(false) # re-enable disabled settings
-	draw_lines.draw_line_between_points(null, null)
-	
-# does all the things that need to be done when the program starts generating points
-func start() -> void:
-	Global.started = true
-	ui.disable_settings(true)
+	draw_lines.draw_line_between_points(null, null) # removes line between points
+	update_polygon() # updates polygon to fit screen
 
 # called with signal "update_polygon" from ui, when the polygon needs to be updated from the ui.gd script
 func _on_ui_update_polygon() -> void:

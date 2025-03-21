@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=20 format=3 uid="uid://j7anjn7mdyf8"]
+[gd_resource type="Theme" load_steps=21 format=3 uid="uid://j7anjn7mdyf8"]
 
 [ext_resource type="FontFile" uid="uid://6nu55r5qqx0c" path="res://fonts/JetBrainsMono-Regular.ttf" id="1_o4dod"]
 
@@ -9,7 +9,7 @@ content_margin_left = 2.0
 content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
-bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+bg_color = Color(0.188235, 0.188235, 0.188235, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -31,7 +31,7 @@ content_margin_left = 2.0
 content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
-bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+bg_color = Color(0.286275, 0.286275, 0.286275, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -39,13 +39,19 @@ corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xssbo"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o4dod"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3y4uc"]
 content_margin_left = 5.0
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yc1xk"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1wrvv"]
 content_margin_left = 5.0
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7d105"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ib7kd"]
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vp4w5"]
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7d105"]
 border_width_left = 2
@@ -170,9 +176,10 @@ Button/styles/hover = SubResource("StyleBoxFlat_ol8wj")
 Button/styles/normal = SubResource("StyleBoxFlat_8kfqq")
 Button/styles/pressed = SubResource("StyleBoxFlat_xssbo")
 CheckButton/styles/focus = SubResource("StyleBoxEmpty_xssbo")
-CheckButton/styles/hover = SubResource("StyleBoxEmpty_o4dod")
-CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_yc1xk")
-CheckButton/styles/normal = SubResource("StyleBoxEmpty_7d105")
+CheckButton/styles/hover = SubResource("StyleBoxFlat_3y4uc")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxFlat_1wrvv")
+CheckButton/styles/normal = SubResource("StyleBoxFlat_ib7kd")
+CheckButton/styles/pressed = SubResource("StyleBoxFlat_vp4w5")
 ColorPickerButton/styles/hover = SubResource("StyleBoxFlat_7d105")
 ColorPickerButton/styles/normal = SubResource("StyleBoxFlat_yc1xk")
 ColorPickerButton/styles/pressed = SubResource("StyleBoxFlat_j2pux")

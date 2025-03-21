@@ -1,17 +1,18 @@
 extends MultiMeshInstance2D
 
+# script variables
+@export var draw_lines: Node2D
+# node variables
 @export var point_timer: Timer # timer which handles steps per second
 @export var sub_viewport: SubViewport # sub viewport containing finalised points to be turned into a texture
 @export var finalised_points: MultiMeshInstance2D # holds the most recent batch of generated points
-@export var draw_lines: Node2D
-@onready var finalised_points_sprite_2d: Sprite2D = $"../FinalisedPointsSprite2D"
+@export var finalised_points_sprite_2d: Sprite2D # holds texture containing old 
 
 var polygon_vertices: Array # global save of the polygon_vertices variable from main.gd, could maybe moved to global
 var polygon_previous_vertices: Array = [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)] # saving the three previous chosen vertices for constraints, default values ensure no douleups so nothing gets influenced
 var vertex_colours: Dictionary # dictionary containing the generated colour for each vertex, key is Vector2 position
-var opacity: float # opacity of placed points
 var previous_points: Array = [Vector2(0, 0), Vector2(0, 0)] # previous point saved for calculating midpoint
-var chosen_vertex: Vector2
+var chosen_vertex: Vector2 # global var containing which vertex has currently been chosen
 
 var running: bool = false # are points currently being generated
 var stepping: bool = false # are the points being generated for a single step
@@ -39,7 +40,8 @@ func _process(_delta: float) -> void:
 				add_point(previous_points[1], vertex_colours[chosen_vertex])
 			stepping = false
 		elif Global.started and batch_point_count >= (Global.multimesh_instance_batch_size - Global.points_per_step): # multimesh points are saved in duplicate multimesh and then active multimesh is reset
-			if running:	
+			# bool argument is var running as _on_ui_finalise_points() calls setup_multimesh() which requires that argument
+			if running: 
 				_on_ui_finalise_points(true)
 			elif stepping:
 				_on_ui_finalise_points(false)
@@ -67,6 +69,8 @@ func setup_multimesh(count: int, start_running: bool) -> void:
 	
 	multimesh.instance_count = count
 	
+	finalised_points.texture = preload("res://assets/point textures/full_circle.png")
+	
 	batch_point_count = 0 # resets batch count for new batch
 	if start_running: # if after the multimesh is setup should the program start iterating, will be false if stepping, otherwise true
 		running = true
@@ -74,12 +78,11 @@ func setup_multimesh(count: int, start_running: bool) -> void:
 # called by main.gd to parse the locked in polygon vertices to points.gd as well as dynamically assigning them colour
 func generate_point_colours(vertices: Array) -> void:
 	polygon_vertices = vertices # sets points.gd polygon_vertices = main.gd polygon_vertices
+	var opacity: float = 1.0 # sets up opacity var with 1.0 being the default value
 	
 	# sets the necessary point opacity
 	if Global.use_point_opacity:
 		opacity = Global.point_opacity / 100
-	else:
-		opacity = 1.0
 	
 	# for each polygon vertex sets its colour using the hsv colour space and some ChatGPT magic
 	for vertex in polygon_vertices:
@@ -150,9 +153,13 @@ func _on_ui_draw_line(toggled) -> void:
 	else:
 		draw_lines.draw_line_between_points(null, null) # hides the line if toggled off
 
-# called on signal "finalise_points" from ui, # multimesh points are saved in duplicate multimesh and then active multimesh is reset
+# called on signal "finalise_points" from ui, multimesh points are saved in duplicate multimesh and then active multimesh is reset
 func _on_ui_finalise_points(start_running: bool) -> void:
 	if Global.started:
 		finalised_points.multimesh = multimesh.duplicate()
-		sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never so old points arent removed unless full reset
+		await RenderingServer.frame_post_draw # waiting to make sure everything is done rendering
+		sub_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE # updates the viewport once so points are shown, clear_mode is set to never when running so old points arent removed unless full reset
+		await RenderingServer.frame_post_draw # more waiting
+
+		finalised_points_sprite_2d.texture = ImageTexture.create_from_image(sub_viewport.get_texture().get_image())
 		setup_multimesh(Global.multimesh_instance_batch_size, start_running)

@@ -43,7 +43,6 @@ var margin := 10
 @export var show_starting_point_check_button: CheckButton
 @export var show_lines_between_points_check_button: CheckButton
 @export var background_color_picker_button: ColorPickerButton
-@export var show_advanced_settings_check_button: CheckButton
 @export var multimesh_instance_batch_size_spin_box: SpinBox
 @export var show_iterations_check_button: CheckButton
 
@@ -169,7 +168,6 @@ func save_settings(save_name: String, confirmation: bool):
 				"point_opacity" : Global.point_opacity,
 				"show_starting_point" : Global.show_starting_point,
 				"show_line_between_points" : Global.show_line_between_points,
-				"show_advanced_settings" : Global.show_advanced_settings,
 				"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size,
 				"show_iterations" : Global.show_iterations
 			}
@@ -234,8 +232,10 @@ func create_button(text: String) -> void:
 	var button = Button.new()
 	var file_menu_button = Button.new()
 	
-	button.text = text.replace(".json", "")
-	button.text = text.replace(".png", "")
+	if save_path == "user://saves/":
+		button.text = text.replace(".json", "")
+	else:
+		button.text = text.replace(".png", "")
 	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	button.toggle_mode = true
 	button.connect("toggled", Callable(self, "_on_file_button_toggled").bind(button))
@@ -354,6 +354,36 @@ func _on_delete_file_button_pressed() -> void:
 	warning_rich_text_label.text = "Warning\nDeleting file '" + save_name +"' cannot be undone.\nAre you sure you wish to continue?"
 	overwrite_button.text = "Continue"
 	overwrite_button.set_meta("confirmation_type", 2)
+
+func _on_simulation_header_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		unlimited_max_points_check_button.get_parent().show()
+	else:
+		unlimited_max_points_check_button.get_parent().hide()
+
+func _on_polygon_header_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		polygon_vertex_size_spin_box.get_parent().show()
+	else:
+		polygon_vertex_size_spin_box.get_parent().hide()
+
+func _on_points_header_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		point_size_spin_box.get_parent().show()
+	else:
+		point_size_spin_box.get_parent().hide()
+
+func _on_misc_header_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		show_starting_point_check_button.get_parent().show()
+	else:
+		show_starting_point_check_button.get_parent().hide()
+
+func _on_advanced_settings_header_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		multimesh_instance_batch_size_spin_box.get_parent().show()
+	else:
+		multimesh_instance_batch_size_spin_box.get_parent().hide()
 
 func _on_unlimited_max_points_check_button_toggled(toggled_on: bool) -> void:
 	Global.unlimited_max_points = toggled_on
@@ -499,10 +529,6 @@ func set_ui_values_to_global() -> void:
 	show_lines_between_points_check_button.set_pressed_no_signal(Global.show_line_between_points)
 	
 	background_color_picker_button.color = Global.background_colour
-	
-	show_advanced_settings_check_button.set_pressed_no_signal(Global.show_advanced_settings)
-	if !Global.show_advanced_settings:
-		multimesh_instance_batch_size_spin_box.get_parent().hide()
 	
 	multimesh_instance_batch_size_spin_box.max_value = 10000000
 	multimesh_instance_batch_size_spin_box.set_value_no_signal(Global.multimesh_instance_batch_size)

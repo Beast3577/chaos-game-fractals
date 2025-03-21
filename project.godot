@@ -13,7 +13,7 @@ config_version=5
 config/name="Chaos Game Fractals"
 run/main_scene="uid://dp7e2cm3sjey7"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://b3faypwsai2we"
 
 [autoload]
 

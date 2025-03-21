@@ -19,7 +19,7 @@ var show_polygon_lines: bool = true
 var use_midpoint: bool = false
 var polygon_vertex_size: float = 3
 
-var point_size: float = 1 #
+var point_size: float = 1 
 var use_point_colour: bool = false
 var use_point_opacity: bool = false
 var point_opacity: float = 10
@@ -28,18 +28,13 @@ var show_starting_point: bool = true
 var show_line_between_points: bool = false
 var background_colour := Color(0.137, 0.137, 0.137)
 
-var show_advanced_settings: bool = false
 var multimesh_instance_batch_size: int = 100000
 var show_iterations: bool = true
 
 """
 TODO
-- add collapsable settings
-- make multimesh only recreate if necessary (avoid unnecessary memory allocation changes)
-- fix resize window bug
-
 - lots of code clean up
 
+- flickers when loading finalised points texture a tiny bit
 - midpoint breaks things
-- add different point sprites
 """
