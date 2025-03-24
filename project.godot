@@ -14,6 +14,7 @@ config/name="Chaos Game Fractals"
 run/main_scene="uid://dp7e2cm3sjey7"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="uid://b3faypwsai2we"
+config/windows_native_icon="res://assets/icons/icon.ico"
 
 [autoload]
 

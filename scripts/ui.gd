@@ -522,6 +522,7 @@ func set_ui_values_to_global() -> void:
 	use_point_opacity_check_button.set_pressed_no_signal(Global.use_point_opacity)
 	
 	opacity_slider.set_value_no_signal(Global.point_opacity)
+	opacity_slider.min_value = 1.0
 	if !Global.use_point_opacity:
 		opacity_slider.get_parent().hide()
 	show_starting_point_check_button.set_pressed_no_signal(Global.show_starting_point)

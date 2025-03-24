@@ -379,6 +379,7 @@ text = "Opacity"
 
 [node name="OpacitySlider" type="HSlider" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/OpacityVBoxContainer"]
 layout_mode = 2
+value = 1.0
 
 [node name="HSeparator15" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
 layout_mode = 2
