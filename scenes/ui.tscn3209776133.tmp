@@ -1,0 +1,786 @@
+[gd_scene load_steps=25 format=3 uid="uid://bj4rb8eh71n4r"]
+
+[ext_resource type="Script" uid="uid://btkbxvm0siuwh" path="res://scripts/ui.gd" id="1_nt7q6"]
+[ext_resource type="Theme" uid="uid://dh0mthso4wi51" path="res://themes/StartStepButtonsTheme.tres" id="2_wm3ai"]
+[ext_resource type="Theme" uid="uid://j7anjn7mdyf8" path="res://themes/SettingsTheme.tres" id="2_x4jx1"]
+[ext_resource type="Theme" uid="uid://dbui8v0mh6onr" path="res://themes/ResetButtonTheme.tres" id="3_8dubc"]
+[ext_resource type="FontFile" uid="uid://cybieo0jyfl0h" path="res://fonts/JetBrainsMono-Bold.ttf" id="3_gdt2y"]
+[ext_resource type="StyleBox" uid="uid://b06fpt0vhc42y" path="res://themes/style boxes/saveload_hover_style_box_flat.tres" id="6_cgfq5"]
+[ext_resource type="StyleBox" uid="uid://bb4pys034ijj2" path="res://themes/style boxes/saveload_pressed_style_box_flat.tres" id="7_7dvkv"]
+[ext_resource type="StyleBox" uid="uid://bcqdifbsihj2t" path="res://themes/style boxes/saveload_normal_style_box_flat.tres" id="8_vdcm2"]
+[ext_resource type="Texture2D" uid="uid://chq6mrfdvqybu" path="res://assets/icons/settings_white.png" id="9_vdcm2"]
+[ext_resource type="Theme" uid="uid://bwwngxw7tdvhu" path="res://themes/SaveLoadTheme.tres" id="10_7dvkv"]
+[ext_resource type="Texture2D" uid="uid://bxdgl353x0bup" path="res://assets/icons/camera_icon_white.png" id="10_qsv74"]
+[ext_resource type="Texture2D" uid="uid://b6g16q4yli32p" path="res://assets/icons/dot_menu_vertical_icon_white.png" id="11_6rmj2"]
+[ext_resource type="Texture2D" uid="uid://dxlyaj6gxlmqr" path="res://assets/icons/warning_icon_white.png" id="11_vdcm2"]
+[ext_resource type="Theme" uid="uid://dqfid4420twhu" path="res://themes/OverwriteButtonTheme.tres" id="13_vsj0x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gdt2y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wm3ai"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_qsv74"]
+color = Color(0.498039, 0.498039, 0.498039, 1)
+thickness = 2
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_h1mc3"]
+color = Color(0.498039, 0.498039, 0.498039, 1)
+thickness = 2
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_vsj0x"]
+color = Color(0.498039, 0.498039, 0.498039, 1)
+thickness = 2
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_cof4p"]
+color = Color(0.498039, 0.498039, 0.498039, 1)
+thickness = 2
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6rmj2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h1mc3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vsj0x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qsv74"]
+
+[node name="UI" type="Control" node_paths=PackedStringArray("iterations_label", "menu_button", "start_button", "step_button", "reset_button", "settings_panel_margin_container", "scroll_container", "unlimited_max_points_check_button", "max_points_spin_box", "unlimited_steps_per_second_check_button", "steps_per_second_spin_box", "points_per_step_spin_box", "random_type_option_button", "polygon_vertices_spin_box", "show_polygon_vertices_check_button", "show_polygon_lines_check_button", "use_midpoint_check_button", "polygon_vertex_size_spin_box", "point_size_spin_box", "use_point_colour_check_button", "use_point_opacity_check_button", "opacity_slider", "show_starting_point_check_button", "show_lines_between_points_check_button", "background_color_picker_button", "multimesh_instance_batch_size_spin_box", "show_iterations_check_button", "save_load_panel_margin_container", "save_load_panel_button", "save_name_line_edit", "save_file_VBox_Container", "thumbnail_texture_rect", "confirmation_margin_container", "warning_rich_text_label", "overwrite_button", "context_menu_popup_panel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nt7q6")
+iterations_label = NodePath("RightSideMarginContainer/VBoxContainer/VBoxContainer/IterationsLabel")
+menu_button = NodePath("MenuButtonMarginContainer/HBoxContainer/MenuButton")
+start_button = NodePath("RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/StartButton")
+step_button = NodePath("RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/StepButton")
+reset_button = NodePath("RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/ResetButton")
+settings_panel_margin_container = NodePath("SettingsPanelMarginContainer")
+scroll_container = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer")
+unlimited_max_points_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/UnlimitedMaxPointsCheckButton")
+max_points_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/MaxPointsSpinBox")
+unlimited_steps_per_second_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/UnlimitedStepsPerSecondCheckButton")
+steps_per_second_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/StepsPerSecondSpinBox")
+points_per_step_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/PointsPerStepSpinBox")
+random_type_option_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/RandomTypeOptionButton")
+polygon_vertices_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/PolygonVerticesSpinbox")
+show_polygon_vertices_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/ShowPolygonVerticesCheckButton")
+show_polygon_lines_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/ShowPolygonLinesCheckButton")
+use_midpoint_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/UseMidpointCheckButton")
+polygon_vertex_size_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/PolygonVertexSizeSpinBox")
+point_size_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/PointSizeSpinBox")
+use_point_colour_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/UsePointColourCheckButton")
+use_point_opacity_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/UsePointOpacityCheckButton")
+opacity_slider = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/OpacityVBoxContainer/OpacitySlider")
+show_starting_point_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/ShowStartingPointCheckButton")
+show_lines_between_points_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/ShowLinesBetweenPointsCheckButton")
+background_color_picker_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/HBoxContainer/BackgroundColorPickerButton")
+multimesh_instance_batch_size_spin_box = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer/MultimeshInstanceBatchSizeSpinBox")
+show_iterations_check_button = NodePath("SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer/ShowIterationsCheckButton")
+save_load_panel_margin_container = NodePath("SaveLoadPanelMarginContainer")
+save_load_panel_button = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveLoadPanelButton")
+save_name_line_edit = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveNameMarginContainer/SaveNameLineEdit")
+save_file_VBox_Container = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer/ScrollContainer/SaveFileVBoxMarginContainer/SaveFileVBoxContainer")
+thumbnail_texture_rect = NodePath("SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ThumbnailMarginContainer/ThumbnailTextureRect")
+confirmation_margin_container = NodePath("ConfirmationMarginContainer")
+warning_rich_text_label = NodePath("ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/WarningRichTextLabel")
+overwrite_button = NodePath("ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer/OverwriteButton")
+context_menu_popup_panel = NodePath("ContextMenuPopupPanel")
+
+[node name="RightSideMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -94.0
+offset_top = -33.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightSideMarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="RightSideMarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(116.875, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightSideMarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_wm3ai")
+toggle_mode = true
+text = "Start"
+
+[node name="StepButton" type="Button" parent="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_wm3ai")
+text = "Step"
+
+[node name="HSeparator" type="HSeparator" parent="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 25
+theme_override_styles/separator = SubResource("StyleBoxEmpty_gdt2y")
+
+[node name="ResetButton" type="Button" parent="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_8dubc")
+text = "Reset"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightSideMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="RightSideMarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wm3ai")
+
+[node name="IterationsLabel" type="Label" parent="RightSideMarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_x4jx1")
+text = "Iterations: "
+
+[node name="SettingsPanelMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 325.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="SettingsPanelContainer" type="PanelContainer" parent="SettingsPanelMarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_x4jx1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SettingsMarginContainer" type="MarginContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_x4jx1")
+
+[node name="SimulationHeaderButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+toggle_mode = true
+button_pressed = true
+text = "Simulation"
+
+[node name="HSeparator13" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_qsv74")
+
+[node name="SimulationVBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MaxPointsLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+text = "Max Points"
+
+[node name="UnlimitedMaxPointsCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+text = "Unlimited"
+
+[node name="MaxPointsSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StepsPerSecondLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+text = "Steps per Second"
+
+[node name="UnlimitedStepsPerSecondCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+text = "Unlimited"
+
+[node name="StepsPerSecondSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PointsPerStepLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+text = "Points per Step"
+
+[node name="PointsPerStepSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator12" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RandomTypeLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+text = "Random Type"
+
+[node name="RandomTypeOptionButton" type="OptionButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+fit_to_longest_item = false
+allow_reselect = true
+item_count = 3
+popup/item_0/text = "True Random"
+popup/item_0/id = 0
+popup/item_1/text = "No Double Ups"
+popup/item_1/id = 1
+popup/item_2/text = "No Neighbour On Double Up"
+popup/item_2/id = 2
+
+[node name="HSeparator3" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_h1mc3")
+
+[node name="PolygonHeaderButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+toggle_mode = true
+button_pressed = true
+text = "Polygon"
+
+[node name="HSeparator4" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_vsj0x")
+
+[node name="PolygonVBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PolygonVerticesLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+text = "Vertices"
+
+[node name="PolygonVerticesSpinbox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator5" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowPolygonVerticesCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+text = "Show Vertices
+"
+
+[node name="HSeparator6" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowPolygonLinesCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+text = "Show Lines
+"
+
+[node name="HSeparator14" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UseMidpointCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+text = "Use Midpoint"
+
+[node name="HSeparator7" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PolygonVertexSizeLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+text = "Vertex Size"
+
+[node name="PolygonVertexSizeSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator8" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_cof4p")
+
+[node name="PointsHeaderButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+toggle_mode = true
+button_pressed = true
+text = "Points"
+
+[node name="HSeparator9" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_vsj0x")
+
+[node name="PointsVBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PointSizeLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+text = "Point Size"
+
+[node name="PointSizeSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator10" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UsePointColourCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+text = "Use Colour"
+
+[node name="HSeparator11" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="UsePointOpacityCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+text = "Use Opacity"
+
+[node name="OpacityVBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator18" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/OpacityVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/OpacityVBoxContainer"]
+layout_mode = 2
+text = "Opacity"
+
+[node name="OpacitySlider" type="HSlider" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/OpacityVBoxContainer"]
+layout_mode = 2
+value = 1.0
+
+[node name="HSeparator15" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_cof4p")
+
+[node name="MiscHeaderButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+toggle_mode = true
+button_pressed = true
+text = "Misc"
+
+[node name="HSeparator16" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_vsj0x")
+
+[node name="MiscVBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ShowStartingPointCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer"]
+layout_mode = 2
+text = "Show Starting Point"
+
+[node name="HSeparator17" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowLinesBetweenPointsCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer"]
+layout_mode = 2
+text = "Show Line Between Points"
+
+[node name="HSeparator20" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Background Colour:"
+
+[node name="BackgroundColorPickerButton" type="ColorPickerButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.137255, 0.137255, 0.137255, 1)
+
+[node name="HSeparator18" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_cof4p")
+
+[node name="AdvancedSettingsHeaderButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_gdt2y")
+toggle_mode = true
+text = "Advanced"
+
+[node name="HSeparator20" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_vsj0x")
+
+[node name="AdvancedSettingsVBoxContainer" type="VBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="HSeparator19" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MultimehsInstanceBatchSizeLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
+layout_mode = 2
+text = "Multimesh Batch Size"
+
+[node name="MultimeshInstanceBatchSizeSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator18" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ShowIterationsCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
+layout_mode = 2
+text = "Show Iterations"
+
+[node name="SaveLoadButtonsMarginContainer" type="MarginContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SaveButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/hover = ExtResource("6_cgfq5")
+theme_override_styles/pressed = ExtResource("7_7dvkv")
+theme_override_styles/normal = ExtResource("8_vdcm2")
+text = "Save"
+
+[node name="VSeparator" type="VSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6rmj2")
+
+[node name="LoadButton" type="Button" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/hover = ExtResource("6_cgfq5")
+theme_override_styles/pressed = ExtResource("7_7dvkv")
+theme_override_styles/normal = ExtResource("8_vdcm2")
+text = "Load"
+
+[node name="MenuButtonMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 50.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuButtonMarginContainer"]
+layout_mode = 2
+
+[node name="MenuButton" type="Button" parent="MenuButtonMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(39.525, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+theme = ExtResource("2_x4jx1")
+toggle_mode = true
+icon = ExtResource("9_vdcm2")
+expand_icon = true
+
+[node name="VSeparator" type="VSeparator" parent="MenuButtonMarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_h1mc3")
+
+[node name="SaveImageButton" type="Button" parent="MenuButtonMarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(39.575, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_x4jx1")
+icon = ExtResource("10_qsv74")
+expand_icon = true
+
+[node name="SaveLoadPanelMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -196.0
+offset_top = -122.0
+offset_right = 197.0
+offset_bottom = 122.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SaveLoadPanelContainer" type="PanelContainer" parent="SaveLoadPanelMarginContainer"]
+layout_mode = 2
+theme = ExtResource("10_7dvkv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer"]
+layout_mode = 2
+
+[node name="ThumbnailMarginContainer" type="MarginContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+
+[node name="ThumbnailTextureRect" type="TextureRect" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ThumbnailMarginContainer"]
+layout_mode = 2
+expand_mode = 5
+
+[node name="SaveNameMarginContainer" type="MarginContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="SaveNameLineEdit" type="LineEdit" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveNameMarginContainer"]
+layout_mode = 2
+placeholder_text = "Enter Save Name"
+
+[node name="ScrollMarginContainer" type="MarginContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_right = 6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer"]
+custom_minimum_size = Vector2(0, 150.065)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SaveFileVBoxMarginContainer" type="MarginContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 10
+
+[node name="SaveFileVBoxContainer" type="VBoxContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer/ScrollContainer/SaveFileVBoxMarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Button" type="Button" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer/ScrollContainer/SaveFileVBoxMarginContainer/SaveFileVBoxContainer"]
+layout_mode = 2
+text = "Testing Format Button"
+alignment = 0
+
+[node name="Button" type="Button" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/ScrollMarginContainer/ScrollContainer/SaveFileVBoxMarginContainer/SaveFileVBoxContainer/Button"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -22.0
+offset_bottom = 22.0
+grow_horizontal = 0
+icon = ExtResource("11_6rmj2")
+flat = true
+expand_icon = true
+
+[node name="SaveLoadButtonsMarginContainer" type="MarginContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer"]
+layout_mode = 2
+
+[node name="SaveLoadPanelButton" type="Button" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/hover = ExtResource("6_cgfq5")
+theme_override_styles/pressed = ExtResource("7_7dvkv")
+theme_override_styles/normal = ExtResource("8_vdcm2")
+text = "Save"
+metadata/origin = 0
+
+[node name="VSeparator" type="VSeparator" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_6rmj2")
+
+[node name="CancelPanelButton" type="Button" parent="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/hover = ExtResource("6_cgfq5")
+theme_override_styles/pressed = ExtResource("7_7dvkv")
+theme_override_styles/normal = ExtResource("8_vdcm2")
+text = "Close"
+
+[node name="ConfirmationMarginContainer" type="MarginContainer" parent="."]
+visible = false
+z_index = 1
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -206.0
+offset_top = -113.0
+offset_right = 206.0
+offset_bottom = 113.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConfirmationPanelContainer" type="PanelContainer" parent="ConfirmationMarginContainer"]
+layout_mode = 2
+theme = ExtResource("10_7dvkv")
+
+[node name="ConfirmationContentsMarginContainer" type="MarginContainer" parent="ConfirmationMarginContainer/ConfirmationPanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer"]
+layout_mode = 2
+
+[node name="WarningTextureRect" type="TextureRect" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(42.97, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("11_vdcm2")
+expand_mode = 4
+
+[node name="WarningRichTextLabel" type="RichTextLabel" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Warning
+A file with the name \"\" already exists.
+Do you wish to overwrite this file?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OverwriteButton" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("13_vsj0x")
+text = "Overwrite"
+metadata/confirmation_type = 0
+
+[node name="VSeparator" type="VSeparator" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_vsj0x")
+
+[node name="CancelButton" type="Button" parent="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/hover = ExtResource("6_cgfq5")
+theme_override_styles/pressed = ExtResource("7_7dvkv")
+theme_override_styles/normal = ExtResource("8_vdcm2")
+text = "Cancel"
+
+[node name="ContextMenuPopupPanel" type="PopupPanel" parent="."]
+size = Vector2i(159, 80)
+theme = ExtResource("10_7dvkv")
+
+[node name="ContextMenuMarginContainer" type="MarginContainer" parent="ContextMenuPopupPanel"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 157.0
+offset_bottom = 78.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ContextMenuPopupPanel/ContextMenuMarginContainer"]
+layout_mode = 2
+
+[node name="OpenFileButton" type="Button" parent="ContextMenuPopupPanel/ContextMenuMarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Open File"
+alignment = 0
+
+[node name="HSeparator" type="HSeparator" parent="ContextMenuPopupPanel/ContextMenuMarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_qsv74")
+
+[node name="DeleteFileButton" type="Button" parent="ContextMenuPopupPanel/ContextMenuMarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Delete File"
+alignment = 0
+
+[connection signal="toggled" from="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_toggled"]
+[connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/StepButton" to="." method="_on_step_button_pressed"]
+[connection signal="pressed" from="RightSideMarginContainer/VBoxContainer/MarginContainer/VBoxContainer/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationHeaderButton" to="." method="_on_simulation_header_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/UnlimitedMaxPointsCheckButton" to="." method="_on_unlimited_max_points_check_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/MaxPointsSpinBox" to="." method="_on_max_points_spin_box_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/UnlimitedStepsPerSecondCheckButton" to="." method="_on_unlimited_steps_per_second_check_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/StepsPerSecondSpinBox" to="." method="_on_steps_per_second_spin_box_value_changed"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/PointsPerStepSpinBox" to="." method="_on_points_per_step_spin_box_value_changed"]
+[connection signal="item_selected" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/SimulationVBoxContainer/RandomTypeOptionButton" to="." method="_on_random_type_option_button_item_selected"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonHeaderButton" to="." method="_on_polygon_header_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/PolygonVerticesSpinbox" to="." method="_on_polygon_vertices_spinbox_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/ShowPolygonVerticesCheckButton" to="." method="_on_show_polygon_vertices_check_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/ShowPolygonLinesCheckButton" to="." method="_on_show_polygon_lines_check_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/UseMidpointCheckButton" to="." method="_on_use_midpoint_check_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer/PolygonVertexSizeSpinBox" to="." method="_on_polygon_vertex_size_spin_box_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsHeaderButton" to="." method="_on_points_header_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/PointSizeSpinBox" to="." method="_on_point_size_spin_box_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/UsePointColourCheckButton" to="." method="_on_use_point_colour_check_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/UsePointOpacityCheckButton" to="." method="_on_use_point_opacity_check_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PointsVBoxContainer/OpacityVBoxContainer/OpacitySlider" to="." method="_on_opacity_slider_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscHeaderButton" to="." method="_on_misc_header_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/ShowStartingPointCheckButton" to="." method="_on_show_starting_point_check_button_toggled"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/ShowLinesBetweenPointsCheckButton" to="." method="_on_show_lines_between_points_check_button_toggled"]
+[connection signal="color_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/MiscVBoxContainer/HBoxContainer/BackgroundColorPickerButton" to="." method="_on_background_color_picker_button_color_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsHeaderButton" to="." method="_on_advanced_settings_header_button_toggled"]
+[connection signal="value_changed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer/MultimeshInstanceBatchSizeSpinBox" to="." method="_on_multimesh_instance_batch_size_spin_box_value_changed"]
+[connection signal="toggled" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer/ShowIterationsCheckButton" to="." method="_on_show_iterations_check_button_toggled"]
+[connection signal="pressed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="toggled" from="MenuButtonMarginContainer/HBoxContainer/MenuButton" to="." method="_on_menu_button_toggled"]
+[connection signal="pressed" from="MenuButtonMarginContainer/HBoxContainer/SaveImageButton" to="." method="_on_save_image_button_pressed"]
+[connection signal="pressed" from="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/SaveLoadPanelButton" to="." method="_on_save_load_panel_button_pressed"]
+[connection signal="pressed" from="SaveLoadPanelMarginContainer/SaveLoadPanelContainer/VBoxContainer/SaveLoadButtonsMarginContainer/HBoxContainer/CancelPanelButton" to="." method="_on_cancel_panel_button_pressed"]
+[connection signal="pressed" from="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer/OverwriteButton" to="." method="_on_overwrite_button_pressed"]
+[connection signal="pressed" from="ConfirmationMarginContainer/ConfirmationPanelContainer/ConfirmationContentsMarginContainer/VBoxContainer/HBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="ContextMenuPopupPanel/ContextMenuMarginContainer/VBoxContainer/OpenFileButton" to="." method="_on_open_file_button_pressed"]
+[connection signal="pressed" from="ContextMenuPopupPanel/ContextMenuMarginContainer/VBoxContainer/DeleteFileButton" to="." method="_on_delete_file_button_pressed"]

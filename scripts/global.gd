@@ -26,7 +26,7 @@ var point_opacity: float = 10
 
 var show_starting_point: bool = true
 var show_line_between_points: bool = false
-var background_colour := Color(0.137, 0.137, 0.137)
+var background_colour: String = "232323ff"
 
 var multimesh_instance_batch_size: int = 100000
 var show_iterations: bool = true
@@ -36,5 +36,5 @@ TODO
 - lots of code clean up
 
 - flickers when loading finalised points texture a tiny bit
-- midpoint breaks things
+- midpoint breaks alternate random methods
 """

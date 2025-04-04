@@ -55,6 +55,7 @@ func setup_multimesh(count: int, start_running: bool) -> void:
 	multimesh.transform_format = MultiMesh.TRANSFORM_2D
 	multimesh.use_colors = true
 	multimesh.instance_count = count
+	multimesh.visible_instance_count = 0
 	
 	var quad_mesh = QuadMesh.new() # a simple quad mesh to represent each point
 	quad_mesh.size = Vector2(Global.point_size, Global.point_size) # setting the point size
@@ -72,8 +73,7 @@ func setup_multimesh(count: int, start_running: bool) -> void:
 	finalised_points.texture = preload("res://assets/point textures/full_circle.png")
 	
 	batch_point_count = 0 # resets batch count for new batch
-	if start_running: # if after the multimesh is setup should the program start iterating, will be false if stepping, otherwise true
-		running = true
+	running = start_running # if after the multimesh is setup should the program start iterating, will be false if stepping, otherwise true
 	
 # called by main.gd to parse the locked in polygon vertices to points.gd as well as dynamically assigning them colour
 func generate_point_colours(vertices: Array) -> void:

@@ -16,6 +16,7 @@ var starting_point := Vector2(0, 0) # default starting coordinates for first poi
 
 # called when the node is "ready", i.e. when both the node and its children have entered the scene tree
 func _ready() -> void:
+	sub_viewport.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE # fixes bug with points not being backed up on first render for some reason
 	# connect window size change signal and setup window_size variable
 	get_viewport().connect("size_changed", _on_viewport_size_changed)
 	window_size = get_viewport().get_visible_rect().size
@@ -28,9 +29,7 @@ func _on_viewport_size_changed() -> void:
 	if !Global.started: # will only update things if simulation hasn't started, ensuring everything gets locked otherwise
 		window_size = get_viewport().get_visible_rect().size
 		sub_viewport.size = window_size # ensures the sub viewport containing finalised points is the same size as everything else which is based off window_size
-		# updates the things that need to fit the screen size
-		update_polygon()
-		queue_redraw() # updates polygon vertices and lines
+		update_polygon() # updates polygon vertices and lines
 
 # called when there is an input event
 func _input(event: InputEvent) -> void:

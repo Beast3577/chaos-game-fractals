@@ -66,7 +66,7 @@ func _ready() -> void:
 	save_path = "user://saves/"
 	if not DirAccess.open(save_path):
 		DirAccess.make_dir_absolute(save_path)
-	save_settings("default", false)
+	save_settings("default", true)
 	
 	var pictures_path = "user://pictures/"
 	if not DirAccess.open(pictures_path):
@@ -104,7 +104,7 @@ func _on_save_image_button_pressed() -> void:
 	image.convert(Image.FORMAT_RGBA8)
 	
 	save_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
-	save_image.fill(Global.background_colour)
+	save_image.fill(Color.from_string(Global.background_colour, Color.BLACK))
 	save_image.blend_rect(image, Rect2(Vector2.ZERO, image.get_size()), Vector2.ZERO)
 	
 	thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
@@ -168,6 +168,7 @@ func save_settings(save_name: String, confirmation: bool):
 				"point_opacity" : Global.point_opacity,
 				"show_starting_point" : Global.show_starting_point,
 				"show_line_between_points" : Global.show_line_between_points,
+				"background_colour" : Global.background_colour,
 				"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size,
 				"show_iterations" : Global.show_iterations
 			}
@@ -284,7 +285,8 @@ func _on_file_button_toggled(button_pressed: bool, button: Button) -> void:
 	else:
 		button.get_child(0).hide()
 		save_name_line_edit.text = ""
-		thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
+		if save_image:
+			thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
 
 func _on_file_menu_button_toggled() -> void:
 	context_menu_popup_panel.popup()
@@ -456,7 +458,7 @@ func _on_show_lines_between_points_check_button_toggled(toggled_on: bool) -> voi
 	draw_line.emit(toggled_on)
 
 func _on_background_color_picker_button_color_changed(color: Color) -> void:
-	Global.background_colour = color
+	Global.background_colour = color.to_html(true)
 	RenderingServer.set_default_clear_color(color)
 
 func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
@@ -529,7 +531,8 @@ func set_ui_values_to_global() -> void:
 	
 	show_lines_between_points_check_button.set_pressed_no_signal(Global.show_line_between_points)
 	
-	background_color_picker_button.color = Global.background_colour
+	background_color_picker_button.color = Color.from_string(Global.background_colour, Color.BLACK)
+	RenderingServer.set_default_clear_color(background_color_picker_button.color)
 	
 	multimesh_instance_batch_size_spin_box.max_value = 10000000
 	multimesh_instance_batch_size_spin_box.set_value_no_signal(Global.multimesh_instance_batch_size)
