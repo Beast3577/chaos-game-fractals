@@ -100,14 +100,15 @@ func _on_save_image_button_pressed() -> void:
 	save_load_panel_button.set_meta("origin", 2)
 	save_name_line_edit.placeholder_text = "Enter Picture Name"
 	
-	var image = finalised_points_sprite_2d.texture.get_image()
-	image.convert(Image.FORMAT_RGBA8)
-	
-	save_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
-	save_image.fill(Color.from_string(Global.background_colour, Color.BLACK))
-	save_image.blend_rect(image, Rect2(Vector2.ZERO, image.get_size()), Vector2.ZERO)
-	
-	thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
+	if Global.point_count < 0:
+		var image = finalised_points_sprite_2d.texture.get_image()
+		image.convert(Image.FORMAT_RGBA8)
+		
+		save_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
+		save_image.fill(Color.from_string(Global.background_colour, Color.BLACK))
+		save_image.blend_rect(image, Rect2(Vector2.ZERO, image.get_size()), Vector2.ZERO)
+		
+		thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
 
 func _on_start_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
@@ -327,6 +328,8 @@ func _on_load_button_pressed() -> void:
 
 func _on_cancel_panel_button_pressed() -> void:
 	save_load_panel_margin_container.hide()
+	if start_button.button_pressed:
+		start.emit()
 
 func _on_save_load_panel_button_pressed() -> void:
 	var save_name = save_name_line_edit.text

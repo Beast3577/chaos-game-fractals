@@ -33,6 +33,8 @@ var show_iterations: bool = true
 
 """
 TODO
+- remove .tmp scenes
+
 - lots of code clean up
 
 - flickers when loading finalised points texture a tiny bit
