@@ -310,7 +310,7 @@ theme_override_constants/separation = 10
 
 [node name="UseMidpointCheckButton" type="CheckButton" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
 layout_mode = 2
-text = "Use Midpoint"
+text = "Use Midpoint (WIP)"
 
 [node name="HSeparator7" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/PolygonVBoxContainer"]
 layout_mode = 2
