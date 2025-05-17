@@ -33,6 +33,8 @@ var show_iterations: bool = true
 
 """
 TODO
+- add saving null image error message
+- image thumbnail persists after deleting
 - lots of code clean up
 
 - flickers when loading finalised points texture a tiny bit

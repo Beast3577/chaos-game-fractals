@@ -94,20 +94,20 @@ func _on_menu_button_toggled(toggled_on: bool) -> void:
 func _on_save_image_button_pressed() -> void:
 	finalise_points.emit(false)
 	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
 	
 	load_save_load_panel_margin_container("user://pictures/")
 	save_load_panel_button.text = "Save"
 	save_load_panel_button.set_meta("origin", 2)
 	save_name_line_edit.placeholder_text = "Enter Picture Name"
 	
-	if Global.point_count < 0:
-		var image = finalised_points_sprite_2d.texture.get_image()
+	var image = finalised_points_sprite_2d.texture.get_image()
+	if image:
 		image.convert(Image.FORMAT_RGBA8)
-		
 		save_image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
-		save_image.fill(Color.from_string(Global.background_colour, Color.BLACK))
+		save_image.fill(Color.from_string(Global.background_colour, "000000ff" ))
 		save_image.blend_rect(image, Rect2(Vector2.ZERO, image.get_size()), Vector2.ZERO)
-		
+
 		thumbnail_texture_rect.texture = ImageTexture.create_from_image(save_image)
 
 func _on_start_button_toggled(toggled_on: bool) -> void:
@@ -177,7 +177,8 @@ func save_settings(save_name: String, confirmation: bool):
 				save_file.store_line(JSON.stringify(save_dict, "\t"))
 				save_file.close()
 		else:
-			save_image.save_png(file_path)
+			if save_image:
+				save_image.save_png(file_path)
 		load_save_load_panel_margin_container(save_path)
 
 func load_settings(save_name: String):
@@ -345,7 +346,13 @@ func _on_open_file_button_pressed() -> void:
 	if save_path == "user://saves/":
 		var file_path = save_path + save_name + ".json"
 		var absolute_file_path = ProjectSettings.globalize_path(file_path)
-		OS.execute("notepad.exe", [absolute_file_path])
+		match OS.get_name():
+			"Windows": 
+				OS.execute("notepad.exe", [absolute_file_path])
+			"macOS":
+				OS.execute("open", [absolute_file_path])
+			"Linux":
+				OS.execute("xdg-open", [absolute_file_path])
 	else:
 		var file_path = save_path + save_name + ".png"
 		var absolute_file_path = ProjectSettings.globalize_path(file_path)

@@ -39,4 +39,5 @@ mouse_right={
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0.136826, 0.136826, 0.136826, 1)

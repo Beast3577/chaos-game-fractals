@@ -18,7 +18,6 @@ var running: bool = false # are points currently being generated
 var stepping: bool = false # are the points being generated for a single step
 var batch_point_count: int = 0 # how many points in the current batch have been generated
 
-
 # called during the processing step of the main loop which happens at every frame and as fast as possible
 func _process(_delta: float) -> void:
 	if Global.unlimited_max_points or Global.point_count < Global.max_points: # stops generating points at max_points limit
