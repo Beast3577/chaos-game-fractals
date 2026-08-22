@@ -66,8 +66,8 @@ func generate_polygon_vertices(n: float, radius: float, center: Vector2) -> Arra
 		var y: float = center.y - cos(angle) * radius
 		vertices.append(Vector2(x, y))
 	# adds a center point if dictated by user
-	if Global.use_midpoint:
-		vertices.append(center)
+	#if Global.use_midpoint:
+	#	vertices.append(center)
 	return vertices
 
 # main function for handling the generation and drawing of the polygon everytime it needs to be redrawn for various reasons

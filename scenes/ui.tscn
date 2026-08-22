@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bj4rb8eh71n4r"]
+[gd_scene load_steps=26 format=3 uid="uid://bj4rb8eh71n4r"]
 
 [ext_resource type="Script" uid="uid://btkbxvm0siuwh" path="res://scripts/ui.gd" id="1_nt7q6"]
 [ext_resource type="Theme" uid="uid://dh0mthso4wi51" path="res://themes/StartStepButtonsTheme.tres" id="2_wm3ai"]
@@ -34,6 +34,10 @@ thickness = 2
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_cof4p"]
 color = Color(0.498039, 0.498039, 0.498039, 1)
 thickness = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_qsv74"]
+font_size = 12
+font_color = Color(0.49803922, 0.49803922, 0.49803922, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6rmj2"]
 
@@ -494,6 +498,27 @@ text = "Multimesh Batch Size"
 
 [node name="MultimeshInstanceBatchSizeSpinBox" type="SpinBox" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
 layout_mode = 2
+
+[node name="HSeparator20" type="HSeparator" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/AdvancedSettingsVBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxLine_vsj0x")
+
+[node name="VersionHBoxContainer" type="HBoxContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/VersionHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Beesty"
+label_settings = SubResource("LabelSettings_qsv74")
+
+[node name="VersionLabel" type="Label" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer/ScrollContainer/SettingsMarginContainer/VBoxContainer/VersionHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "v1.3.1"
+label_settings = SubResource("LabelSettings_qsv74")
+horizontal_alignment = 2
 
 [node name="SaveLoadButtonsMarginContainer" type="MarginContainer" parent="SettingsPanelMarginContainer/SettingsPanelContainer/VBoxContainer"]
 layout_mode = 2

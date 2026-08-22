@@ -164,7 +164,6 @@ func save_settings(save_name: String, confirmation: bool):
 				"polygon_vertices" : Global.polygon_vertices,
 				"show_polygon_vertices" : Global.show_polygon_vertices,
 				"show_polygon_lines" : Global.show_polygon_lines,
-				"use_midpoint" : Global.use_midpoint,
 				"polygon_vertex_size" : Global.polygon_vertex_size,
 				"point_size" : Global.point_size,
 				"use_point_colour" : Global.use_point_colour,
