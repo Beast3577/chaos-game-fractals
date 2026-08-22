@@ -7,6 +7,7 @@ var started: bool = false
 # Default Settings
 var unlimited_max_points: bool = false
 var max_points: int = 1000000
+var auto_restart: bool = false
 var unlimited_steps_per_second: bool = false
 var steps_per_second: float = 1
 var points_per_step: float = 1

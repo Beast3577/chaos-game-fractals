@@ -27,6 +27,7 @@ var margin := 10
 
 @export var unlimited_max_points_check_button: CheckButton
 @export var max_points_spin_box: SpinBox
+@export var auto_restart_check_button: CheckButton
 @export var unlimited_steps_per_second_check_button: CheckButton
 @export var steps_per_second_spin_box: SpinBox
 @export var points_per_step_spin_box: SpinBox
@@ -43,8 +44,9 @@ var margin := 10
 @export var show_starting_point_check_button: CheckButton
 @export var show_lines_between_points_check_button: CheckButton
 @export var background_color_picker_button: ColorPickerButton
-@export var multimesh_instance_batch_size_spin_box: SpinBox
 @export var show_iterations_check_button: CheckButton
+@export var minimal_ui_check_button: CheckButton
+@export var multimesh_instance_batch_size_spin_box: SpinBox
 
 @export var save_load_panel_margin_container: MarginContainer
 @export var save_load_panel_button: Button
@@ -154,6 +156,7 @@ func save_settings(save_name: String, confirmation: bool):
 			var save_dict = {
 				"unlimited_max_points" : Global.unlimited_max_points,
 				"max_points" : Global.max_points,
+				"auto_restart" : Global.auto_restart,
 				"unlimited_steps_per_second" : Global.unlimited_steps_per_second,
 				"steps_per_second" : Global.steps_per_second,
 				"points_per_step" : Global.points_per_step,
@@ -170,8 +173,7 @@ func save_settings(save_name: String, confirmation: bool):
 				"show_starting_point" : Global.show_starting_point,
 				"show_line_between_points" : Global.show_line_between_points,
 				"background_colour" : Global.background_colour,
-				"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size,
-				"show_iterations" : Global.show_iterations
+				"multimesh_instance_batch_size" : Global.multimesh_instance_batch_size
 			}
 			if save_file:
 				save_file.store_line(JSON.stringify(save_dict, "\t"))
@@ -391,6 +393,12 @@ func _on_misc_header_button_toggled(toggled_on: bool) -> void:
 	else:
 		show_starting_point_check_button.get_parent().hide()
 
+func _on_ui_header_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		show_iterations_check_button.get_parent().show()
+	else:
+		show_iterations_check_button.get_parent().hide()
+
 func _on_advanced_settings_header_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		multimesh_instance_batch_size_spin_box.get_parent().show()
@@ -406,6 +414,9 @@ func _on_unlimited_max_points_check_button_toggled(toggled_on: bool) -> void:
 
 func _on_max_points_spin_box_value_changed(value: float) -> void:
 	Global.max_points = int(value)
+
+func _on_auto_restart_check_button_toggled(toggled_on: bool) -> void:
+	Global.auto_restart = toggled_on
 
 func _on_unlimited_steps_per_second_check_button_toggled(toggled_on: bool) -> void:
 	Global.unlimited_steps_per_second = toggled_on
@@ -471,23 +482,29 @@ func _on_background_color_picker_button_color_changed(color: Color) -> void:
 	Global.background_colour = color.to_html(true)
 	RenderingServer.set_default_clear_color(color)
 
-func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
-	Global.multimesh_instance_batch_size = int(value)
-	points_per_step_spin_box.max_value = Global.multimesh_instance_batch_size
-
-func _on_show_advanced_settings_check_button_toggled(toggled_on: bool) -> void:
-	Global.show_advanced_settings = toggled_on
+func _on_minimal_ui_check_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
-		multimesh_instance_batch_size_spin_box.get_parent().show()
+		iterations_label.get_parent().get_parent().hide()
+		show_iterations_check_button.set_pressed_no_signal(false)
+		show_iterations_check_button.disabled = true
+		menu_button.set_self_modulate(Color(1, 1, 1, 0.25))
+		save_image_button.set_self_modulate(Color(1, 1, 1, 0))
 	else:
-		multimesh_instance_batch_size_spin_box.get_parent().hide()
+		iterations_label.get_parent().get_parent().show()
+		show_iterations_check_button.set_pressed_no_signal(Global.show_iterations)
+		show_iterations_check_button.disabled = false
+		menu_button.set_self_modulate(Color(1, 1, 1, 1))
+		save_image_button.set_self_modulate(Color(1, 1, 1, 1))
 
 func _on_show_iterations_check_button_toggled(toggled_on: bool) -> void:
-	Global.show_iterations = toggled_on
 	if toggled_on:
 		iterations_label.get_parent().show()
 	else:
 		iterations_label.get_parent().hide()
+
+func _on_multimesh_instance_batch_size_spin_box_value_changed(value: float) -> void:
+	Global.multimesh_instance_batch_size = int(value)
+	points_per_step_spin_box.max_value = Global.multimesh_instance_batch_size
 
 func disable_settings(disable: bool) -> void:
 	max_points_spin_box.editable = !disable
@@ -501,6 +518,9 @@ func disable_settings(disable: bool) -> void:
 	multimesh_instance_batch_size_spin_box.editable = !disable
 
 func set_ui_values_to_global() -> void:
+	unlimited_max_points_check_button.set_pressed_no_signal(Global.unlimited_max_points)
+	if Global.unlimited_max_points:
+		max_points_spin_box.hide()
 	max_points_spin_box.max_value = 999999999
 	max_points_spin_box.set_value_no_signal(Global.max_points)
 
@@ -544,10 +564,8 @@ func set_ui_values_to_global() -> void:
 	background_color_picker_button.color = Color.from_string(Global.background_colour, Color.BLACK)
 	RenderingServer.set_default_clear_color(background_color_picker_button.color)
 	
+	show_iterations_check_button.set_pressed_no_signal(Global.show_iterations)
+	
 	multimesh_instance_batch_size_spin_box.max_value = 10000000
 	multimesh_instance_batch_size_spin_box.set_value_no_signal(Global.multimesh_instance_batch_size)
 	multimesh_instance_batch_size_spin_box.min_value = 10000
-	
-	show_iterations_check_button.set_pressed_no_signal(Global.show_iterations)
-	if !Global.show_iterations:
-		iterations_label.get_parent().hide()

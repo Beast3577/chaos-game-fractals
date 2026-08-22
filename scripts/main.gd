@@ -97,7 +97,8 @@ func _on_ui_step() -> void:
 		points.previous_points[0] = starting_point # initialises the starting point
 		# making sure the program knows whats going on
 		start()
-	points.stepping = true
+	elif !points.running:
+		points.stepping = true
 
 # does all the things that need to be done when the program starts generating points
 func start() -> void:
@@ -118,6 +119,12 @@ func _on_ui_reset() -> void:
 	ui.disable_settings(false) # re-enable disabled settings
 	draw_lines.draw_line_between_points(null, null) # removes line between points
 	update_polygon() # updates polygon to fit screen
+
+# called with signal "reset" from points, slight variations of reset that auto starts
+func _on_points_reset() -> void:
+	_on_ui_reset()
+	_on_ui_start()
+	
 
 # called with signal "update_polygon" from ui, when the polygon needs to be updated from the ui.gd script
 func _on_ui_update_polygon() -> void:
